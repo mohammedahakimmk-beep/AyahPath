@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "689616886472",
+    "project_id": "ayahpath",
+    "storage_bucket": "ayahpath.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689616886472:android:90fefc5cb181e4707623fd",
+        "android_client_info": {
+          "package_name": "com.ayahpath.ayahpath"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3jasVklYRAjRkMcJ3toZyCwkCzK5IGPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
