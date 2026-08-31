@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.2.0",
+  "latestVersion": "1.2.1",
   "minRequiredVersion": "1.0.0",
-  "downloadUrl": "https://github.com/mohammedahakimmk-beep/AyahPath/releases/download/v1.2.0/app-release.apk",
-  "releaseNotes": "AyahPath 1.2.0: secure account sign-in (email/password or Google) with Firebase, online progress sync to the cloud, and Terms of Service + Privacy Policy with consent required before sign-in."
+  "downloadUrl": "https://github.com/mohammedahakimmk-beep/AyahPath/releases/download/v1.2.1/app-release.apk",
+  "releaseNotes": "AyahPath 1.2.1: expanded Terms of Service and Privacy Policy with many more sections and clearer all-ages language \u2014 AyahPath is open to learners of all ages."
 }
