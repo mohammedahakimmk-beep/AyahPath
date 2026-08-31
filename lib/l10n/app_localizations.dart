@@ -134,6 +134,36 @@ abstract class AppLocalizations {
   /// **'An important update is available. Please download and install the latest version to continue using AyahPath.'**
   String get updateRequiredMessage;
 
+  /// No description provided for @updateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Available'**
+  String get updateAvailable;
+
+  /// No description provided for @updateWhatsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new:'**
+  String get updateWhatsNew;
+
+  /// No description provided for @updateRequiredNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This update is required to continue using AyahPath.'**
+  String get updateRequiredNotice;
+
+  /// No description provided for @updateSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get updateSkip;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Now'**
+  String get updateNow;
+
   /// No description provided for @skillReading.
   ///
   /// In en, this message translates to:

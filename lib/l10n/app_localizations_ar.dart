@@ -29,6 +29,22 @@ class AppLocalizationsAr extends AppLocalizations {
       'يتوفر تحديث مهم. يرجى تنزيل أحدث إصدار وتثبيته لمواصلة استخدام آية باث.';
 
   @override
+  String get updateAvailable => 'تحديث متاح';
+
+  @override
+  String get updateWhatsNew => 'ما الجديد:';
+
+  @override
+  String get updateRequiredNotice =>
+      'هذا التحديث مطلوب لمواصلة استخدام آية باث.';
+
+  @override
+  String get updateSkip => 'تخطي';
+
+  @override
+  String get updateNow => 'تحديث الآن';
+
+  @override
   String get skillReading => 'القراءة';
 
   @override

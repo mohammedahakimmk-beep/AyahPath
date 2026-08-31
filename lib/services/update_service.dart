@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../l10n/app_localizations.dart';
+
 /// Checks for app updates on launch and forces users to update.
 ///
 /// Flow:
@@ -25,7 +27,7 @@ class UpdateService {
       'https://ayahpath.web.app/version.json';
 
   /// Current app version — should match pubspec.yaml.
-  static const String currentVersion = '1.3.0';
+  static const String currentVersion = '1.3.1';
 
   static const String _lastCheckedKey = 'ayahpath.last_update_check';
   static const String _skippedVersionsKey = 'ayahpath.skipped_versions';
@@ -53,7 +55,8 @@ class UpdateService {
       final isBelowLatest = isVersionBelow(currentVersion, latestVersion);
 
       // Record last check time
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance()
+          .timeout(const Duration(seconds: 3));
       await prefs.setInt(_lastCheckedKey, DateTime.now().millisecondsSinceEpoch);
 
       if (isBelowMinimum) {
@@ -98,52 +101,59 @@ class UpdateService {
       barrierDismissible: update.isMandatory,
       builder: (ctx) => PopScope(
         canPop: !update.isMandatory,
-        child: AlertDialog(
-          icon: Icon(
-            update.isMandatory ? Icons.system_update : Icons.update,
-            color: update.isMandatory ? Colors.red : Colors.blue,
-            size: 48,
-          ),
-          title: Text(update.isMandatory ? 'Update Required' : 'Update Available'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Version ${update.latestVersion}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
+        child: Builder(
+          builder: (ctx) {
+            final l10n = AppLocalizations.of(ctx);
+            return AlertDialog(
+              icon: Icon(
+                update.isMandatory ? Icons.system_update : Icons.update,
+                color: update.isMandatory ? Colors.red : Colors.blue,
+                size: 48,
               ),
-              const SizedBox(height: 8),
-              if (update.releaseNotes.isNotEmpty) ...[
-                const Text('What\'s new:'),
-                const SizedBox(height: 4),
-                Text(
-                  update.releaseNotes,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+              title: Text(
+                update.isMandatory ? l10n.updateRequired : l10n.updateAvailable,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.updateVersionLabel(update.latestVersion),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  if (update.releaseNotes.isNotEmpty) ...[
+                    Text(l10n.updateWhatsNew),
+                    const SizedBox(height: 4),
+                    Text(
+                      update.releaseNotes,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (update.isMandatory)
+                    Text(
+                      l10n.updateRequiredNotice,
+                      style: const TextStyle(color: Colors.red, fontSize: 13),
+                    ),
+                ],
+              ),
+              actions: [
+                if (!update.isMandatory)
+                  TextButton(
+                    onPressed: () {
+                      _skipVersion(update.latestVersion);
+                      Navigator.pop(ctx, false);
+                    },
+                    child: Text(l10n.updateSkip),
+                  ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: Text(l10n.updateNow),
                 ),
-                const SizedBox(height: 12),
               ],
-              if (update.isMandatory)
-                const Text(
-                  'This update is required to continue using AyahPath.',
-                  style: TextStyle(color: Colors.red, fontSize: 13),
-                ),
-            ],
-          ),
-          actions: [
-            if (!update.isMandatory)
-              TextButton(
-                onPressed: () {
-                  _skipVersion(update.latestVersion);
-                  Navigator.pop(ctx, false);
-                },
-                child: const Text('Skip'),
-              ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Update Now'),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

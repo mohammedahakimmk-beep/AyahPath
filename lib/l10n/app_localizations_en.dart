@@ -29,6 +29,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'An important update is available. Please download and install the latest version to continue using AyahPath.';
 
   @override
+  String get updateAvailable => 'Update Available';
+
+  @override
+  String get updateWhatsNew => 'What\'s new:';
+
+  @override
+  String get updateRequiredNotice =>
+      'This update is required to continue using AyahPath.';
+
+  @override
+  String get updateSkip => 'Skip';
+
+  @override
+  String get updateNow => 'Update Now';
+
+  @override
   String get skillReading => 'Reading';
 
   @override

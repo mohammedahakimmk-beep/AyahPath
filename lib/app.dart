@@ -45,7 +45,15 @@ class _AyahPathAppState extends State<AyahPathApp> {
   }
 
   Future<void> _checkForUpdates() async {
-    final update = await UpdateService.checkForUpdate();
+    UpdateInfo? update;
+    try {
+      // Hard timeout so the splash/checking screen can never hang forever.
+      update = await UpdateService.checkForUpdate()
+          .timeout(const Duration(seconds: 8));
+    } catch (_) {
+      // Network failure or timeout — proceed without blocking the app.
+      update = null;
+    }
     if (!mounted) return;
 
     if (update != null) {
@@ -53,8 +61,9 @@ class _AyahPathAppState extends State<AyahPathApp> {
       if (shouldUpdate && update.downloadUrl.isNotEmpty) {
         await _openDownload(update.downloadUrl);
       }
-      if (update.isMandatory && !shouldUpdate) {
-        // Keep the update blocking screen on so user cannot continue.
+      if (update.isMandatory) {
+        // Stay on the blocking download screen (whether or not the user tapped
+        // Update Now — they must install the required version).
         if (mounted) {
           setState(() {
             _update = update;
@@ -62,16 +71,6 @@ class _AyahPathAppState extends State<AyahPathApp> {
           });
         }
         return;
-      }
-      if (update.isMandatory) {
-        // User tapped Update Now on a mandatory update. Stay on screen to
-        // encourage installation, but let them proceed after download starts.
-        if (mounted) {
-          setState(() {
-            _update = update;
-            _updateChecked = true;
-          });
-        }
       }
     }
 
