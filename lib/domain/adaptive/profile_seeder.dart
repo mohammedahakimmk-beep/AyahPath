@@ -43,6 +43,6 @@ class ProfileSeeder {
 
 class AppDefault {
   AppDefault._();
-  static const String journeySurah = 'Al-Mulk';
-  static const int journeySurahNumber = 67;
+  static const String journeySurah = 'An-Nas';
+  static const int journeySurahNumber = 114;
 }

@@ -23,7 +23,7 @@ void main() {
       ));
       expect(profile.skills[SkillType.reading]!.confidence, lessThan(0.1));
       expect(profile.onboardingCompleted, isTrue);
-      expect(profile.journeySurahName, 'Al-Mulk');
+      expect(profile.journeySurahName, 'An-Nas');
     });
 
     test('fluent readers seed with higher confidence', () {

@@ -326,6 +326,7 @@
   "lessonPlay": "تشغيل",
   "lessonTestMe": "اختبرني",
   "lessonRepeat": "كرر",
+  "lessonAnalysisFailed": "تعذر تحليل تلاوتك. حاول مرة أخرى.",
   "lessonListenRepeatFirst": "استمع جيدًا إلى كل آية، ثم كررها بصوت عالٍ.\nتدرب حتى تشعر أنها طبيعية.",
   "lessonListenRepeatNext": "استمع وكرر هذه الآية. حاول مطابقة التلاوة.",
   "lessonReadAloneFirst": "الآن اقرأ الآيات من الذاكرة دون سماعها أولًا.\nخُذ وقتك — الدقة أهم من السرعة.",

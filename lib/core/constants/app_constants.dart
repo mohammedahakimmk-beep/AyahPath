@@ -10,8 +10,8 @@ class AppConstants {
       'بِسْمِ اللَّـهِ الرَّحْمَـٰنِ الرَّحِيمِ';
 
   // Reference context for the "Continue your learning" journey default.
-  static const String defaultJourneySurah = 'Al-Mulk';
-  static const int defaultJourneySurahNumber = 67;
+  static const String defaultJourneySurah = 'An-Nas';
+  static const int defaultJourneySurahNumber = 114;
 
   // Privacy
   static const String modelStoreKey = 'ayahpath.model.state';

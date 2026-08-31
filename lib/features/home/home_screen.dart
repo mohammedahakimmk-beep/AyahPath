@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 Text(context.l10n.homeContinueLearning, style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 4),
                 Text(
-                  '${p.journeySurahName ?? 'Al-Mulk'} · ${context.l10n.homeLessonsCompleted(p.lessonsCompleted)}',
+                  '${p.journeySurahName ?? 'An-Nas'} · ${context.l10n.homeLessonsCompleted(p.lessonsCompleted)}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 18),
@@ -301,7 +301,7 @@ class _JourneyCard extends StatelessWidget {
               Icon(Icons.menu_book, color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 10),
               Text(
-                p.journeySurahName ?? 'Al-Mulk',
+                p.journeySurahName ?? 'An-Nas',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ],

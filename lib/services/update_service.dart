@@ -27,7 +27,7 @@ class UpdateService {
       'https://ayahpath.web.app/version.json';
 
   /// Current app version — should match pubspec.yaml.
-  static const String currentVersion = '1.3.1';
+  static const String currentVersion = '1.4.0';
 
   static const String _lastCheckedKey = 'ayahpath.last_update_check';
   static const String _skippedVersionsKey = 'ayahpath.skipped_versions';

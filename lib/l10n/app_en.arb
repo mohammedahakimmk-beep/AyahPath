@@ -566,6 +566,7 @@
   "lessonPlay": "Play",
   "lessonTestMe": "Test Me",
   "lessonRepeat": "Repeat",
+  "lessonAnalysisFailed": "Could not analyze your recitation. Please try again.",
   "lessonListenRepeatFirst": "Listen carefully to each ayah, then repeat it aloud.\nPractice until it feels natural.",
   "lessonListenRepeatNext": "Listen and repeat this ayah. Try to match the recitation.",
   "lessonReadAloneFirst": "Now read the ayahs from memory without hearing them first.\nTake your time — accuracy over speed.",

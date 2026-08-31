@@ -959,6 +959,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lessonRepeat => 'Repeat';
 
   @override
+  String get lessonAnalysisFailed =>
+      'Could not analyze your recitation. Please try again.';
+
+  @override
   String get lessonListenRepeatFirst =>
       'Listen carefully to each ayah, then repeat it aloud.\nPractice until it feels natural.';
 

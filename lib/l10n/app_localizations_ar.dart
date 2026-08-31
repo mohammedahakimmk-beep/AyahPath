@@ -940,6 +940,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get lessonRepeat => 'كرر';
 
   @override
+  String get lessonAnalysisFailed => 'تعذر تحليل تلاوتك. حاول مرة أخرى.';
+
+  @override
   String get lessonListenRepeatFirst =>
       'استمع جيدًا إلى كل آية، ثم كررها بصوت عالٍ.\nتدرب حتى تشعر أنها طبيعية.';
 

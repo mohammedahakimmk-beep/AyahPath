@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/surah_lesson.dart';
 import '../../data/quran/quran_data.dart';
 import '../../data/quran/quran_models.dart';
+import '../../domain/voice/voice_analysis_service.dart';
 import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
@@ -31,6 +32,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
   double? _lastScore;
   bool _isPlaying = false;
   bool _lessonComplete = false;
+  bool _analyzing = false;
 
   List<LessonPhase> get phases => widget.lesson.phases;
   LessonPhase get currentPhase => phases[_currentPhaseIndex];
@@ -81,21 +83,112 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
   }
 
   void _startListening() {
-    setState(() => _isListening = true);
-    _pulseController.repeat(reverse: true);
+    final app = context.read<AppState>();
+    final ayah = _currentAyah();
+    if (ayah == null) return;
 
-    final delay = Duration(milliseconds: 3000 + (DateTime.now().millisecond % 2000));
-    Future.delayed(delay, () {
+    if (!app.voice.isModelReady) {
+      // Load the bundled Tarteel model on first use so listening works without
+      // the user having to install it from Settings.
+      setState(() {
+        _isListening = true;
+        _analyzing = false;
+        _lastScore = null;
+      });
+      _prepareVoiceModel(app).then((ok) {
+        if (!mounted) return;
+        if (ok) {
+          _startRecording(app);
+        } else {
+          _pulseController.stop();
+          setState(() => _isListening = false);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(context.l10n.lessonAnalysisFailed),
+          ));
+        }
+      });
+      return;
+    }
+
+    _startRecording(app);
+  }
+
+  void _startRecording(AppState app) {
+    setState(() {
+      _isListening = true;
+      _lastScore = null;
+      _analyzing = false;
+    });
+    _pulseController.repeat(reverse: true);
+    app.voice.startRecording(onMicError: (msg) {
       if (!mounted) return;
       _pulseController.stop();
       _pulseController.value = 0;
-      setState(() {
-        _isListening = false;
-        _lastScore = currentPhase == LessonPhase.aiTest
-            ? 0.65 + (DateTime.now().millisecond % 35) / 100
-            : 0.75 + (DateTime.now().millisecond % 25) / 100;
-      });
+      setState(() => _isListening = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     });
+  }
+
+  Future<bool> _prepareVoiceModel(AppState app) async {
+    try {
+      return await app.voice.prepareModel();
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _stopAndAnalyze() async {
+    final app = context.read<AppState>();
+    final ayah = _currentAyah();
+    if (ayah == null) {
+      _resetListening();
+      return;
+    }
+
+    _pulseController.stop();
+    _pulseController.value = 0;
+    setState(() {
+      _isListening = false;
+      _analyzing = true;
+    });
+
+    RecitationFeedback result;
+    try {
+      result = await app.voice.stopAndAnalyze(target: [ayah]);
+    } catch (_) {
+      if (!mounted) return;
+      _resetListening();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(context.l10n.lessonAnalysisFailed),
+      ));
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() {
+      _analyzing = false;
+      // Honest scoring: silence / empty recitation scores low, never a
+      // misleadingly high number.
+      _lastScore = _guardScore(result.overallScore, result);
+    });
+  }
+
+  void _resetListening() {
+    setState(() {
+      _isListening = false;
+      _analyzing = false;
+    });
+  }
+
+  /// Prevents silence or an almost-empty recitation from being rewarded.
+  static double _guardScore(double score, RecitationFeedback result) {
+    if (score <= 0.0) return 0.0;
+    // When several target words were missed (silence / sparse recitation),
+    // cap the score low so saying nothing cannot earn a high mark.
+    if (result.missedWords.length >= 2) {
+      return score.clamp(0.0, 0.45);
+    }
+    return score.clamp(0.0, 1.0);
   }
 
   void _nextAyah() {
@@ -136,7 +229,9 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
   void _markLessonComplete() {
     final appState = context.read<AppState>();
     final lessonId = int.tryParse(widget.lesson.id) ?? 0;
-    final avgScore = _lastScore ?? 0.7;
+    // Honest score: the measured recitation score, or a neutral baseline when
+    // no recitation was actually analyzed (never a fabricated high mark).
+    final avgScore = _lastScore != null ? _lastScore! : 0.5;
     appState.markSurahLessonComplete(lessonId, avgScore);
   }
 
@@ -272,7 +367,8 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
           if (currentPhase == LessonPhase.listenRepeat && _isPlaying)
             _buildPlayingIndicator(scheme),
           if (_isListening) _buildListeningIndicator(scheme),
-          if (_lastScore != null && !_isListening) _buildScoreCard(),
+          if (_analyzing) _buildAnalyzingIndicator(scheme),
+          if (_lastScore != null && !_isListening && !_analyzing) _buildScoreCard(),
         ],
       ),
     );
@@ -419,6 +515,31 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
     );
   }
 
+  Widget _buildAnalyzingIndicator(ColorScheme scheme) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.gold.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            context.l10n.recAnalyzingOnDevice,
+            style: TextStyle(fontSize: 13, color: AppColors.gold),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildScoreCard() {
     final scorePercent = ((_lastScore ?? 0) * 100).round();
     final isGood = (_lastScore ?? 0) >= 0.8;
@@ -490,10 +611,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
               _buildActionButton(
                 icon: Icons.stop,
                 label: context.l10n.lessonStop,
-                onPressed: () {
-                  _pulseController.stop();
-                  setState(() => _isListening = false);
-                },
+                onPressed: _stopAndAnalyze,
                 isPrimary: false,
                 scheme: scheme,
               )
@@ -541,7 +659,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
   Widget _buildCompletionScreen() {
     final appState = context.read<AppState>();
     final stats = appState.lessonStats;
-    final scorePercent = ((_lastScore ?? 0.7) * 100).round();
+    final scorePercent = ((_lastScore ?? 0.5) * 100).round();
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -592,7 +710,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
                       ),
                       const SizedBox(height: 8),
                       LinearProgressIndicator(
-                        value: (_lastScore ?? 0.7).clamp(0.0, 1.0),
+                        value: (_lastScore ?? 0.5).clamp(0.0, 1.0),
                         backgroundColor: scheme.outlineVariant,
                         color: scheme.primary,
                         minHeight: 6,

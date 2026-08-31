@@ -1892,6 +1892,12 @@ abstract class AppLocalizations {
   /// **'Repeat'**
   String get lessonRepeat;
 
+  /// No description provided for @lessonAnalysisFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not analyze your recitation. Please try again.'**
+  String get lessonAnalysisFailed;
+
   /// No description provided for @lessonListenRepeatFirst.
   ///
   /// In en, this message translates to:

@@ -180,7 +180,7 @@ class LessonPlanner {
   static String _journeyRange(LearnerProfile profile) {
     final surah = profile.journeySurahNumber != 0
         ? QuranDataset.byNumber(profile.journeySurahNumber)
-        : QuranDataset.byNumber(67);
+        : QuranDataset.byNumber(114);
     if (surah == null) return '1:1-7';
     final count = min(5, surah.ayahCount);
     return '${surah.number}:1-$count';
