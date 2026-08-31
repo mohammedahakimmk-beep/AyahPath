@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.0.0",
+  "latestVersion": "1.1.0",
   "minRequiredVersion": "1.0.0",
-  "downloadUrl": "https://github.com/mohammedahakimmk-beep/AyahPath/releases/download/v1.0.0/app-release.apk",
-  "releaseNotes": "Initial release of AyahPath: adaptive surah-based lessons, AI recitation analysis, full Qur'an reader, and offline-first privacy."
+  "downloadUrl": "https://github.com/mohammedahakimmk-beep/AyahPath/releases/download/v1.1.0/app-release.apk",
+  "releaseNotes": "AyahPath 1.1.0: the full Qur'an (all 114 surahs, 6,236 ayahs) is now bundled offline, and recitation analysis uses a real on-device Whisper model (Tarteel-style) instead of simulated feedback."
 }
