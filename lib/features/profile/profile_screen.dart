@@ -26,6 +26,8 @@ class ProfileScreen extends StatelessWidget {
             _navTile(context, Icons.memory_outlined, 'Model Manager', 'Download & manage on-device voice models', () => push(context, const ModelManagerScreen())),
             _navTile(context, Icons.shield_outlined, 'Privacy', 'See how your data is handled', () => push(context, const PrivacyScreen())),
             _navTile(context, Icons.settings_outlined, 'Settings', 'Theme, notifications, language', () => push(context, const SettingsScreen())),
+            const SizedBox(height: 20),
+            const _AccountCard(),
           ],
         ),
       ),
@@ -121,6 +123,54 @@ class _ProfileCard extends StatelessWidget {
             children: [
               for (final g in goals) Pill(label: g.label),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Shows the signed-in account and lets the user sign out.
+class _AccountCard extends StatelessWidget {
+  const _AccountCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    final email = app.authUser?.email ?? 'Signed in';
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.account_circle_outlined, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Account', style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      email,
+                      style: Theme.of(context).textTheme.bodySmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              icon: const Icon(Icons.logout),
+              label: const Text('Sign out'),
+              onPressed: () async {
+                await app.signOut();
+              },
+            ),
           ),
         ],
       ),

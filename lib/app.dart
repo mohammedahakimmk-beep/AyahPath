@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'core/theme/app_theme.dart';
+import 'features/auth/login_screen.dart';
 import 'features/learn/recitation_practice_screen.dart';
 import 'features/onboarding/onboarding_flow.dart';
 import 'navigation/app_shell.dart';
@@ -102,8 +103,16 @@ class _AyahPathAppState extends State<AyahPathApp> {
         '/home': (_) => const AppShell(),
       },
       home: Consumer<AppState>(
-        builder: (context, app, _) =>
-            app.needsOnboarding ? const OnboardingFlow() : const AppShell(),
+        builder: (context, app, _) {
+          // Gate the whole app behind authentication + ToS/PP consent.
+          if (!app.authReady || !app.dataReady) {
+            return const _AuthLoadingScreen();
+          }
+          if (app.authUser == null) {
+            return const LoginScreen();
+          }
+          return app.needsOnboarding ? const OnboardingFlow() : const AppShell();
+        },
       ),
     );
   }
@@ -146,8 +155,7 @@ class _AyahPathAppState extends State<AyahPathApp> {
   }
 
   // Non-blocking full-screen mandatory update view.
-  Widget _buildMandatoryUpdate(UpdateInfo update) {
-    return MaterialApp(
+  Widget _buildMandatoryUpdate(UpdateInfo update) {    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: const Color(0xFFF0F4F8),
@@ -194,6 +202,46 @@ class _AyahPathAppState extends State<AyahPathApp> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Shown while authentication / data synchronization is being established.
+class _AuthLoadingScreen extends StatelessWidget {
+  const _AuthLoadingScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0F4F8),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1B5E20).withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.menu_book, size: 40, color: Color(0xFF1B5E20)),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'AyahPath',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E)),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Preparing your journey...',
+              style: TextStyle(fontSize: 14, color: Color(0xFF666666)),
+            ),
+            const SizedBox(height: 24),
+            const CircularProgressIndicator(color: Color(0xFF1B5E20)),
+          ],
         ),
       ),
     );

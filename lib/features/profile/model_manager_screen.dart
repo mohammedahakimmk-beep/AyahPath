@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
-import '../../domain/model/model_manager_service.dart';
 import '../../services/app_state.dart';
 
-/// Download and manage the on-device recitation (Whisper) model.
+/// Manage the on-device Tarteel AI recitation model.
 ///
-/// This drives the real local model: downloading the multilingual Whisper
-/// binary (~461 MB) once from Hugging Face, then all analysis runs fully
-/// on-device.
+/// The Tarteel AI Quran model (Q8_0, ~78 MB) is bundled inside the APK, so
+/// recitation analysis runs fully on-device with no download and no connection.
 class ModelManagerScreen extends StatefulWidget {
   const ModelManagerScreen({super.key});
 
@@ -18,12 +16,9 @@ class ModelManagerScreen extends StatefulWidget {
 }
 
 class _ModelManagerScreenState extends State<ModelManagerScreen> {
-  bool _downloading = false;
-
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final installed = app.voiceModelInstalled;
     return Scaffold(
       appBar: AppBar(title: const Text('Model Manager')),
       body: SafeArea(
@@ -36,33 +31,14 @@ class _ModelManagerScreenState extends State<ModelManagerScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'A multilingual Whisper model powers recognition. It is '
-              'downloaded once (~461 MB) from Hugging Face, then recitation '
-              'analysis runs fully on-device — your voice never leaves the phone.',
+              'AyahPath uses the Tarteel AI model — a speech model fine-tuned '
+              'on Quran recitation — bundled inside the app. It runs fully '
+              'on-device: your voice never leaves the phone, and no download '
+              'is required.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 16),
-            if (installed)
-              _installedCard()
-            else
-              _downloadSection(app),
-            if (_downloading)
-              const Padding(
-                padding: EdgeInsets.only(top: 12),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-            if (app.voiceModelError != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: AppCard(
-                  color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.4),
-                  child: Text(
-                    'Model download failed. Check your connection and try again.\n'
-                    '${app.voiceModelError}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-              ),
+            _installedCard(),
             const SizedBox(height: 24),
             Text(
               'Storage',
@@ -80,12 +56,12 @@ class _ModelManagerScreenState extends State<ModelManagerScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${app.voiceStorageUsedMb.toStringAsFixed(0)} of ~${app.models.totalMediaMb.toStringAsFixed(0)} MB',
+                    '${app.voiceStorageUsedMb.toStringAsFixed(0)} of ~${app.models.totalMediaMb.toStringAsFixed(0)} MB bundled',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'The app itself stays lean — the model is an optional download.',
+                    'Included in the app — no extra space is downloaded at runtime.',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -102,10 +78,21 @@ class _ModelManagerScreenState extends State<ModelManagerScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _info('Microphone', '→ captured locally'),
-                  _info('Whisper model', '→ speech to text on-device'),
+                  _info('Tarteel AI model', '→ speech-to-text on-device'),
                   _info('Ayah matcher', '→ compare with the recitation'),
                   _info('Analysis', '→ assistive feedback'),
                 ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                'Credits: The Tarteel AI model is an Apache-2.0 checkpoint '
+                'distributed by tarteel-ai on Hugging Face, fine-tuned from '
+                'OpenAI Whisper on Quran recitation. It is run locally by the '
+                'whisper.cpp engine (MIT).',
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ],
@@ -138,82 +125,18 @@ class _ModelManagerScreenState extends State<ModelManagerScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Whisper — Arabic (multilingual small)',
+                  'Tarteel AI — Quran recitation (Q8_0)',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          const Text('✓ Installed'),
-          const Text('✓ Ready for offline use'),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    final app = context.read<AppState>();
-                    await app.removeModel();
-                    messenger.showSnackBar(
-                      const SnackBar(content: Text('Model removed. You can re-download it anytime.')),
-                    );
-                  },
-                  child: const Text('Delete'),
-                ),
-              ),
-            ],
-          ),
+          const Text('✓ Bundled & ready'),
+          const Text('✓ Fully offline'),
+          const Text('✓ Privacy-first (no upload)'),
         ],
       ),
-    );
-  }
-
-  Widget _downloadSection(AppState app) {
-    return Column(
-      children: [
-        for (final option in ModelManagerService.availableModels)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          option.name,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      if (option.isRecommended) const Pill(label: 'Recommended'),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(option.description, style: Theme.of(context).textTheme.bodySmall),
-                  const SizedBox(height: 4),
-                  Text('${option.sizeMb} MB', style: Theme.of(context).textTheme.bodySmall),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: FilledButton.tonal(
-                      onPressed: _downloading
-                          ? null
-                          : () async {
-                              setState(() => _downloading = true);
-                              await app.downloadModel(option);
-                              if (mounted) setState(() => _downloading = false);
-                            },
-                      child: const Text('Download'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-      ],
     );
   }
 }

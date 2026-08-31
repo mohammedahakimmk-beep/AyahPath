@@ -17,22 +17,22 @@ class ModelOption {
   final bool isRecommended;
 }
 
-/// Describes the real on-device Whisper recitation model.
+/// Describes the on-device Tarteel AI recitation model.
 ///
-/// The actual model is a multilingual Whisper (whisper.cpp) binary downloaded
-/// once from HuggingFace and cached on-device. Its ~461 MB size reflects the
-/// real bundled model; it is fetched by [WhisperVoiceAnalysisService]. Nothing
-/// about learner data depends on model size.
+/// The model is a Tarteel AI checkpoint — a Whisper-architecture speech model
+/// fine-tuned on Quran recitation (Apache-2.0, distributed by Tarteel on
+/// Hugging Face) — quantized to Q8_0 (~78 MB) and bundled inside the APK. It
+/// runs fully offline via the whisper.cpp engine; no download is needed.
 class ModelManagerService {
   static const List<ModelOption> availableModels = [
     ModelOption(
-      id: 'whisper-small',
-      name: 'Whisper — Arabic (multilingual small)',
-      sizeMb: 461,
-      modelSizeLabel: 'small',
+      id: 'tarteel-base',
+      name: 'Tarteel AI — Quran recitation (base, Q8_0)',
+      sizeMb: 78,
+      modelSizeLabel: 'base-q8_0',
       description:
-          'On-device Whisper model used for Arabic recitation recognition. '
-          'Runs fully locally; downloaded once from Hugging Face.',
+          'Bundled Tarteel AI model fine-tuned on Quran recitation. Runs fully '
+          'offline — no download or connection needed.',
       isRecommended: true,
     ),
   ];

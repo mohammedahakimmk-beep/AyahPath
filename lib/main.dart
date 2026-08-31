@@ -1,16 +1,28 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
-import 'data/local/local_store.dart';
+import 'data/local/data_store.dart';
 import 'data/quran/quran_data.dart';
 import 'services/app_state.dart';
+import 'services/firebase_auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final appState = AppState(store: LocalStore(prefs));
+
+  // Initialize Firebase (failures on startup are surfaced via the login gate).
+  try {
+    await Firebase.initializeApp();
+  } catch (_) {
+    // Auth/RTDB will simply be unavailable; the UI handles it.
+  }
+
+  final appState = AppState(
+    store: FirebaseDataStore(),
+    auth: FirebaseAuthService(),
+  );
+  await appState.initialize();
 
   // Load the bundled Qur'an dataset (all 114 surahs) before first frame.
   try {

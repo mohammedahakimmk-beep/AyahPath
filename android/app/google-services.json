@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "689616886472",
+    "firebase_url": "https://ayahpath-default-rtdb.firebaseio.com",
     "project_id": "ayahpath",
     "storage_bucket": "ayahpath.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.ayahpath.ayahpath"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "689616886472-er169sgu9gjs8evvsgl4233dkt9sb9co.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ayahpath.ayahpath",
+            "certificate_hash": "3f6791877d867c80851416b04d811e9bf122998d"
+          }
+        },
+        {
+          "client_id": "689616886472-k5ntlr326i0cmmrj7vcbujbb0gvilp1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC3jasVklYRAjRkMcJ3toZyCwkCzK5IGPE"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689616886472-k5ntlr326i0cmmrj7vcbujbb0gvilp1m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

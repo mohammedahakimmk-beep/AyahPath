@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../data/local/local_store.dart';
+import '../data/local/data_store.dart';
 import '../data/models/activity_record.dart';
 import '../data/models/learner_profile.dart';
 import '../data/models/lesson.dart';
@@ -15,19 +16,36 @@ import '../domain/adaptive/surah_lesson_generator.dart';
 import '../domain/model/model_manager_service.dart';
 import '../domain/voice/voice_analysis_service.dart';
 import '../domain/voice/whisper_voice_analysis.dart';
+import 'auth_service.dart';
 
 /// Central application state: the learner model + per-cycle lesson plan.
 ///
 /// This is the orchestrator of AyahPath's core feedback loop:
 /// onboarding → placement → learner profile → personalized plan → lesson →
 /// practice → voice analysis → assessment → profile update → next lesson.
+///
+/// Persistence is intentionally online-first: all learning data lives in
+/// Firebase Realtime Database, scoped to the signed-in user, via [DataStore].
+/// Only the login session (handled by FirebaseAuth) remains local.
 class AppState extends ChangeNotifier {
-  AppState({required this._store})
-      : voice = WhisperVoiceAnalysisService() {
-    _load();
+  AppState({required DataStore store, required AuthService auth})
+      : _store = store, // ignore: prefer_initializing_formals
+        _auth = auth, // ignore: prefer_initializing_formals
+        voice = WhisperVoiceAnalysisService() {
+    _auth.userChanges.listen(_onAuthChanged);
   }
 
-  final LocalStore _store;
+  final DataStore _store;
+  final AuthService _auth;
+
+  /// Currently signed-in Firebase user, or null when signed out.
+  User? authUser;
+
+  /// True once authentication state has been established on launch.
+  bool authReady = false;
+
+  /// True once the user's RTDB data has been loaded after sign-in.
+  bool dataReady = false;
 
   LearnerProfile profile = LearnerProfile();
 
@@ -75,22 +93,83 @@ class AppState extends ChangeNotifier {
         masteryScores: masteryScores,
       );
 
-  void _load() {
-    final json = _store.loadLearnerProfile();
+  // ---------- Auth ----------
+
+  /// Initializes the auth backend and kicks off the first data load.
+  Future<void> initialize() async {
+    await _auth.initialize();
+    authReady = true;
+    _onAuthChanged(_auth.currentUser);
+    notifyListeners();
+  }
+
+  void _onAuthChanged(User? user) {
+    authUser = user;
+    if (user == null) {
+      _resetSessionData();
+      dataReady = true;
+      notifyListeners();
+      return;
+    }
+    _load();
+  }
+
+  Future<void> signInWithEmail({required String email, required String password}) async {
+    await _auth.signInWithEmail(email: email, password: password);
+    _onAuthChanged(_auth.currentUser);
+  }
+
+  Future<void> signUpWithEmail({required String email, required String password}) async {
+    await _auth.signUpWithEmail(email: email, password: password);
+    _onAuthChanged(_auth.currentUser);
+  }
+
+  Future<void> signInWithGoogle() async {
+    await _auth.signInWithGoogle();
+    _onAuthChanged(_auth.currentUser);
+  }
+
+  Future<void> sendPasswordReset({required String email}) async {
+    await _auth.sendPasswordReset(email: email);
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+    // _onAuthChanged fires via the userChanges stream; also handle locally.
+    _onAuthChanged(_auth.currentUser);
+  }
+
+  void _resetSessionData() {
+    profile = LearnerProfile();
+    currentLesson = null;
+    completedLessonIds.clear();
+    masteryScores.clear();
+    dataReady = false;
+  }
+
+  Future<void> _load() async {
+    dataReady = false;
+    profile = LearnerProfile();
+    completedLessonIds.clear();
+    masteryScores.clear();
+
+    final json = await _store.loadLearnerProfile();
     if (json != null) {
       profile = LearnerProfile.fromJson(json);
-    } else {
-      profile = LearnerProfile();
     }
-    // Load surah lesson progress
-    final savedLessonIds = _store.loadCompletedLessonIds();
+
+    final savedLessonIds = await _store.loadCompletedLessonIds();
     if (savedLessonIds != null) {
       completedLessonIds.addAll(savedLessonIds);
     }
-    final savedMastery = _store.loadMasteryScores();
+
+    final savedMastery = await _store.loadMasteryScores();
     if (savedMastery != null) {
       masteryScores.addAll(savedMastery);
     }
+
+    dataReady = true;
+    notifyListeners();
   }
 
   Future<void> persist() async {
@@ -377,13 +456,13 @@ class AppState extends ChangeNotifier {
 
   // ---------- Data control ----------
 
+  /// Clears the signed-in user's RTDB data (and in-memory session).
   Future<void> resetAllData() async {
     profile = LearnerProfile();
     currentLesson = null;
     completedLessonIds.clear();
     masteryScores.clear();
-    await _store.clearLearnerData();
-    await _store.clearSurahLessonData();
+    await _store.clearAllUserData();
     notifyListeners();
   }
 }

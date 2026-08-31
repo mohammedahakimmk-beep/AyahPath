@@ -79,6 +79,36 @@ class Whisper {
     }
   }
 
+  /// Initialize the engine directly from an on-device model file, bypassing
+  /// the built-in downloader. Used by AyahPath to load the bundled Tarteel AI
+  /// Quran model (shipped as an app asset) fully offline.
+  ///
+  /// [modelPath] - absolute path to a whisper.cpp GGML model file.
+  /// [options]   - transcription options (defaults to Arabic).
+  ///
+  /// Throws [WhisperError] on failure.
+  Future<void> initializeFromFile({
+    required String modelPath,
+    WhisperOptions options = const WhisperOptions(),
+  }) async {
+    if (_isInitialized) {
+      await _engine?.dispose();
+      _engine = null;
+      _isInitialized = false;
+      _loadedModel = null;
+    }
+    _engine = _createEngine();
+    try {
+      await _engine!.initialize(modelPath: modelPath, options: options);
+      _isInitialized = true;
+      _loadedModel = WhisperModel.small;
+    } catch (e) {
+      _isInitialized = false;
+      _loadedModel = null;
+      rethrow;
+    }
+  }
+
   /// Pause an in-flight model download. Partial data is kept on disk;
   /// call [resumeDownload] to continue.
   void pauseDownload() => _downloader?.pause();

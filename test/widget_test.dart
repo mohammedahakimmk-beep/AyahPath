@@ -8,6 +8,7 @@ import 'package:ayahpath/features/learn/learn_screen.dart';
 import 'package:ayahpath/features/learn/surah_lesson_player_screen.dart';
 import 'package:ayahpath/data/models/surah_lesson.dart';
 import 'package:ayahpath/services/app_state.dart';
+import 'package:ayahpath/services/null_auth_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,9 @@ void main() {
   Future<AppState> createAppState() async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    return AppState(store: LocalStore(prefs));
+    final app = AppState(store: LocalStore(prefs), auth: NullAuthService());
+    await app.initialize();
+    return app;
   }
 
   testWidgets('app boots to onboarding when no profile exists', (tester) async {

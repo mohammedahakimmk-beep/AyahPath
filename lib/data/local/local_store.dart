@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'data_store.dart';
+
 /// Wraps [SharedPreferences] as a simple key/value + JSON document store.
 ///
-/// This is the local persistence layer (offline-first). It is deliberately
-/// abstracted so a more robust backend (Drift/SQLite) can be swapped in
-/// without changing the rest of the app.
-class LocalStore {
+/// Retained for tests and offline tooling. In production AyahPath stores all
+/// learning data in Firebase Realtime Database via [FirebaseDataStore]; only
+/// the login session (handled by FirebaseAuth) stays local.
+class LocalStore implements DataStore {
   LocalStore(this._prefs);
 
   final SharedPreferences _prefs;
@@ -14,11 +16,13 @@ class LocalStore {
   static const String _completedLessonsKey = 'ayahpath.completed_lessons';
   static const String _masteryScoresKey = 'ayahpath.mastery_scores';
 
+  @override
   Future<void> saveLearnerProfile(Map<String, dynamic> json) async {
     await _prefs.setString(_profileKey, jsonEncode(json));
   }
 
-  Map<String, dynamic>? loadLearnerProfile() {
+  @override
+  Future<Map<String, dynamic>?> loadLearnerProfile() async {
     final raw = _prefs.getString(_profileKey);
     if (raw == null) return null;
     try {
@@ -29,17 +33,20 @@ class LocalStore {
     }
   }
 
+  @override
   Future<void> clearLearnerData() async {
     await _prefs.remove(_profileKey);
   }
 
   // ---------- Surah lesson persistence ----------
 
+  @override
   Future<void> saveCompletedLessonIds(List<int> ids) async {
     await _prefs.setString(_completedLessonsKey, jsonEncode(ids));
   }
 
-  List<int>? loadCompletedLessonIds() {
+  @override
+  Future<List<int>?> loadCompletedLessonIds() async {
     final raw = _prefs.getString(_completedLessonsKey);
     if (raw == null) return null;
     try {
@@ -50,11 +57,13 @@ class LocalStore {
     }
   }
 
+  @override
   Future<void> saveMasteryScores(Map<String, double> scores) async {
     await _prefs.setString(_masteryScoresKey, jsonEncode(scores));
   }
 
-  Map<String, double>? loadMasteryScores() {
+  @override
+  Future<Map<String, double>?> loadMasteryScores() async {
     final raw = _prefs.getString(_masteryScoresKey);
     if (raw == null) return null;
     try {
@@ -67,8 +76,15 @@ class LocalStore {
     }
   }
 
+  @override
   Future<void> clearSurahLessonData() async {
     await _prefs.remove(_completedLessonsKey);
     await _prefs.remove(_masteryScoresKey);
+  }
+
+  @override
+  Future<void> clearAllUserData() async {
+    await clearLearnerData();
+    await clearSurahLessonData();
   }
 }

@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
 import '../../services/app_state.dart';
+import '../auth/legal_screen.dart';
+import '../../data/legal/legal_content.dart';
 
-/// Transparent privacy: what is local, what leaves the device, and control.
+/// Transparent privacy: what is local, what is stored online, and control.
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({super.key});
 
@@ -27,26 +29,26 @@ class PrivacyScreen extends StatelessWidget {
                   Text('Privacy first', style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 4),
                   Text(
-                    'AyahPath is designed to keep your learning private. Your '
-                    'recitation, progress and profile are stored on your device.',
+                    'AyahPath keeps your learning private. Your recitation is '
+                    'analyzed on-device, and your profile and progress are stored '
+                    'securely online so they stay in sync with your account.',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'What runs locally'),
+            const SectionHeader(title: 'On your device'),
             const SizedBox(height: 12),
-            _statusRow(context, true, 'Qur’an text & reading', 'Stored on-device'),
+            _statusRow(context, true, 'Qur’an text & reading', 'Bundled locally'),
             _statusRow(context, true, 'Recitation voice analysis', app.voice.isLocal ? 'On-device model' : 'Cloud'),
-            _statusRow(context, true, 'Progress, lessons & memorization', 'On-device'),
-            _statusRow(context, true, 'Learner profile', 'On-device'),
+            _statusRow(context, true, 'Login session', 'Local'),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'What may use the internet'),
+            const SectionHeader(title: 'Stored securely online (your account)'),
             const SizedBox(height: 12),
+            _statusRow(context, false, 'Progress, lessons & memorization', 'Synced to your account'),
+            _statusRow(context, false, 'Learner profile', 'Synced to your account'),
             _statusRow(context, false, 'AI tutor (advanced cloud)', 'Optional / planned'),
-            _statusRow(context, false, 'Account sync & backup', 'Requires your consent'),
-            _statusRow(context, false, 'Model updates', 'Only when you update'),
             _statusRow(context, false, 'Additional content', 'On demand'),
             const SizedBox(height: 20),
             const SectionHeader(title: 'Your control'),
@@ -56,11 +58,32 @@ class PrivacyScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'AyahPath avoids collecting unnecessary personal information. '
-                    'Everything you see here can be reviewed and, if you choose, wiped.',
+                    'AyahPath collects the minimum data needed to work and '
+                    'never sells your information. Your recitation audio is not '
+                    'uploaded. You can review your rights and delete your data '
+                    'at any time.',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 12),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.description_outlined),
+                    title: const Text('Terms of Service'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const LegalScreen(document: termsOfService)),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.privacy_tip_outlined),
+                    title: const Text('Privacy Policy'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const LegalScreen(document: privacyPolicy)),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
@@ -75,7 +98,7 @@ class PrivacyScreen extends StatelessWidget {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: const Text('Delete all data?'),
-                            content: const Text('This permanently removes your profile, progress, lessons and memorization from this device.'),
+                            content: const Text('This permanently removes your profile, progress, lessons and memorization from your account.'),
                             actions: [
                               TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
                               FilledButton(

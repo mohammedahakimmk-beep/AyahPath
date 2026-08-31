@@ -77,10 +77,10 @@ class SettingsScreen extends StatelessWidget {
                   const Icon(Icons.info_outline),
                   const SizedBox(height: 8),
                   Text(
-                    'AyahPath saves all learning data on your device by default. '
-                    'Internet is only used for the optional AI tutor, syncing and '
-                    'model updates — never for your recitation when the on-device '
-                    'model is installed.',
+                    'AyahPath syncs your learning data to your account so it stays '
+                    'in sync across reinstalls. Your recitation audio is analyzed '
+                    'on-device and is never uploaded. You can review and delete '
+                    'your data at any time from the Privacy screen.',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -88,7 +88,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'AyahPath v1.0.0 · Offline-first',
+              'AyahPath v1.1.0 · Online-first',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall,
             ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_whisper/flutter_whisper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -8,22 +9,21 @@ import '../../data/quran/quran_models.dart';
 import 'arabic_matcher.dart';
 import 'voice_analysis_service.dart';
 
-/// On-device recitation recognition in the style of Tarteel AI.
+/// On-device recitation recognition using the Tarteel AI Quran model.
 ///
 /// Pipeline:
-///   1. Whisper (whisper.cpp, local) transcribes the user's spoken Arabic
-///      recitation — no cloud, no account, runs fully on this phone.
-///   2. A Tarteel-style ayah matcher aligns the theory-free transcript against
-///      the trusted target ayah text (diacritics normalized) and scores it.
-///
-/// The model (multilingual Whisper [WhisperModel.small], ~461 MB) is downloaded
-/// once on first use from HuggingFace and cached in app support storage.
+///   1. The Tarteel AI model (a Whisper-architecture speech model fine-tuned
+///      on Quran recitation) is bundled with the app and runs locally via the
+///      whisper.cpp engine — no cloud, no account, fully on this phone.
+///   2. A Tarteel-style ayah matcher aligns the transcript against the trusted
+///      target ayah text (diacritics normalized) and scores it.
 class WhisperVoiceAnalysisService implements VoiceAnalysisService {
-  WhisperVoiceAnalysisService({Whisper? whisper, this.model = WhisperModel.small})
-      : _whisper = whisper ?? Whisper();
+  WhisperVoiceAnalysisService({Whisper? whisper}) : _whisper = whisper ?? Whisper();
+
+  /// Bundled Tarteel AI model asset path (Q8_0 quantized, ~78 MB).
+  static const String modelAssetPath = 'assets/models/tarteel-q8.bin';
 
   final Whisper _whisper;
-  final WhisperModel model;
 
   bool _preparing = false;
   bool _ready = false;
@@ -42,6 +42,8 @@ class WhisperVoiceAnalysisService implements VoiceAnalysisService {
   /// Last failure message from model preparation (for the UI).
   String? get lastError => _lastError;
 
+  /// Copies the bundled Tarteel model into app support storage (once) and
+  /// loads it, so whisper.cpp can read it from a real file path.
   @override
   Future<bool> prepareModel() async {
     if (_ready) return true;
@@ -53,8 +55,11 @@ class WhisperVoiceAnalysisService implements VoiceAnalysisService {
     }
     _preparing = true;
     try {
-      await _whisper.initialize(
-        model: model,
+      final dir = await getApplicationSupportDirectory();
+      final target = File('${dir.path}/models/tarteel-q8.bin');
+      final modelFile = await _provisionModel(target);
+      await _whisper.initializeFromFile(
+        modelPath: modelFile.path,
         options: const WhisperOptions(
           language: 'ar', // transcribe Arabic recitation
           vad: true,
@@ -72,8 +77,21 @@ class WhisperVoiceAnalysisService implements VoiceAnalysisService {
     }
   }
 
-  /// Release the loaded engine and remove the cached model file so the
-  /// download can be fully redone.
+  Future<File> _provisionModel(File target) async {
+    if (target.existsSync() && target.lengthSync() > 1024 * 1024) {
+      return target;
+    }
+    target.parent.createSync(recursive: true);
+    final data = await rootBundle.load(modelAssetPath);
+    target.writeAsBytesSync(
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+      flush: true,
+    );
+    return target;
+  }
+
+  /// Release the loaded engine and remove the copied model file to reclaim
+  /// storage (the bundled asset remains in the APK for re-provisioning).
   @override
   Future<void> deleteModel() async {
     try {
@@ -84,10 +102,8 @@ class WhisperVoiceAnalysisService implements VoiceAnalysisService {
     _lastError = null;
     try {
       final dir = await getApplicationSupportDirectory();
-      final modelFile = File('${dir.path}/models/${model.name}.bin');
+      final modelFile = File('${dir.path}/models/tarteel-q8.bin');
       if (modelFile.existsSync()) modelFile.deleteSync();
-      final part = File('${dir.path}/models/${model.name}.bin.part');
-      if (part.existsSync()) part.deleteSync();
     } catch (_) {}
   }
 

@@ -1,7 +1,7 @@
 name: ayahpath
 description: "AyahPath - Your Personalized Path to Learning the Quran. An adaptive, offline-first Quran learning companion."
 publish_to: 'none'
-version: 1.1.0+2
+version: 1.2.0+3
 
 environment:
   sdk: ^3.13.2
@@ -22,6 +22,10 @@ dependencies:
   # needs). We patch in the missing header so whisper.cpp compiles on-device.
   flutter_whisper:
     path: third_party/flutter_whisper
+  firebase_core: ^4.14.0
+  firebase_auth: ^6.6.1
+  firebase_database: ^12.5.0
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -38,3 +42,4 @@ flutter:
 
   assets:
     - assets/quran/quran.json
+    - assets/models/tarteel-q8.bin
