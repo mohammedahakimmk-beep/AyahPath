@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.4.0",
+  "latestVersion": "1.4.1",
   "minRequiredVersion": "1.0.0",
-  "downloadUrl": "https://github.com/mohammedahakimmk-beep/AyahPath/releases/download/v1.4.0/app-release.apk",
-  "releaseNotes": "AyahPath 1.4.0: real voice AI (Tarteel) now powers the in-lesson recite-and-test step with honest on-device scoring instead of simulated scores, and the Quran reading journey now always starts from Surah An-Nas."
+  "downloadUrl": "https://github.com/mohammedahakimmk-beep/AyahPath/releases/download/v1.4.1/app-release.apk",
+  "releaseNotes": "AyahPath 1.4.1: fixes the white screen that appeared when an update was available — the update dialog and mandatory-update screen now render correctly inside the app."
 }

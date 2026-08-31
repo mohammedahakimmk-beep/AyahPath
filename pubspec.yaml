@@ -1,7 +1,7 @@
 name: ayahpath
 description: "AyahPath - Your Personalized Path to Learning the Quran. An adaptive, offline-first Quran learning companion."
 publish_to: 'none'
-version: 1.4.0+7
+version: 1.4.1+8
 
 environment:
   sdk: ^3.13.2
