@@ -85,7 +85,7 @@ class LegalDocument {
 /// Terms of Service for AyahPath.
 const LegalDocument termsOfService = LegalDocument(
   title: 'Terms of Service',
-  version: '1.0',
+  version: '2.0',
   effectiveDate: 'September 1, 2026',
   intro:
       'These Terms of Service ("Terms") govern your access to and use of the '
@@ -535,13 +535,185 @@ const LegalDocument termsOfService = LegalDocument(
           'you through the Service, by email, or through our website. You '
           'agree to receive notices from us electronically.'),
     ]),
+    LegalSection(title: '22. Our Commitment to Users of All Ages', paragraphs: [
+      LegalParagraph(
+          '{b}AyahPath is fundamentally committed to being a safe, respectful, '
+          'and appropriate experience for users of all ages, including children '
+          'and families.{/b} This commitment is reflected throughout the '
+          'Service: it contains no advertising, no in-app purchases linking to '
+          'real-world payments, no public social features, and no content that '
+          'is adult, violent, or age-inappropriate.'),
+      LegalParagraph(
+          'We review our content and features to ensure they remain appropriate '
+          'for a general and family audience. If you ever encounter content or '
+          'behavior that you believe is inappropriate, we encourage you to '
+          'report it to us through the contact details in these Terms so that '
+          'we can review and address it.'),
+      LegalParagraph(
+          '{b}Because we welcome users of all ages, we apply special care to '
+          'privacy and safety, and we never permit advertising or third-party '
+          'tracking that would exploit or profile young users.{/b}'),
+    ]),
+    LegalSection(title: '23. Copyright, Trademarks, & DMCA', paragraphs: [
+      LegalParagraph(
+          'We respect the intellectual property rights of others and expect our '
+          'users to do the same. If you believe that any content available '
+          'through the Service infringes your copyright, you may notify us with '
+          'the following information: (a) a description of the copyrighted '
+          'work that you claim has been infringed; (b) a description of where '
+          'the allegedly infringing material is located; (c) your contact '
+          'information; and (d) a statement that you have a good-faith belief '
+          'that the use is not authorized and that the information you provide '
+          'is accurate. We will review and respond to valid notices promptly.'),
+      LegalParagraph(
+          '{b}The Qur’anic text is sacred and is presented from fixed, trusted '
+          'sources; it is not our proprietary material and is reproduced '
+          'faithfully under the terms of its own sources.{/b} Our trademarks, '
+          'logos, and original application assets remain our property.'),
+      LegalParagraph(
+          'We may remove or disable access to any content that we believe '
+          'infringes the rights of others, and we reserve the right to '
+          'terminate, in appropriate circumstances, accounts we believe are '
+          'repeat infringers.'),
+    ]),
+    LegalSection(title: '24. Force Majeure', paragraphs: [
+      LegalParagraph(
+          'We will not be liable or responsible for any failure to perform, '
+          'or delay in performance of, any of our obligations under these '
+          'Terms where that failure or delay is caused by an event outside '
+          'our reasonable control, including but not limited to natural '
+          'disasters, war, terrorism, civil unrest, public-health emergencies, '
+          'pandemics, power failures, telecommunications or internet outages, '
+          'and failures or delays of third-party services upon which we rely.'),
+      LegalParagraph(
+          '{b}Our obligation to perform is suspended for the duration of any '
+          'such event, and we will use reasonable efforts to resume performance '
+          'as soon as reasonably practicable.{/b}'),
+    ]),
+    LegalSection(title: '25. Export Control & Foreign Use', paragraphs: [
+      LegalParagraph(
+          'The Service may be subject to applicable export-control and economic-'
+          'sanctions laws and regulations. You agree to comply with all such '
+          'laws and regulations, and you represent that you are not located in '
+          'a country that is subject to a trade or economic embargo or '
+          'sanctions, and that you are not a person or entity prohibited from '
+          'receiving the Service under applicable law.'),
+      LegalParagraph(
+          '{b}You are solely responsible for ensuring that your use of the '
+          'Service complies with the laws of the jurisdiction from which you '
+          'access it.{/b} The Service is intended for lawful private study of '
+          'the Qur’an, and you are responsible for ensuring such study is '
+          'lawful where you live.'),
+    ]),
+    LegalSection(title: '26. Availability, Support, & Updates', paragraphs: [
+      LegalParagraph(
+          'We work hard to keep the Service available and reliable, but the '
+          'Service is provided on an "as available" basis and we do not '
+          'guarantee uninterrupted or error-free operation. We may from time '
+          'to time perform maintenance, release updates, or make changes that '
+          'require the Service, or certain features, to be temporarily '
+          'unavailable.'),
+      LegalParagraph(
+          '{b}Support is provided on a best-efforts basis.{/b} If you '
+          'encounter a problem, we encourage you to report it through the '
+          'contact details provided in these Terms, and we will do our best to '
+          'assist you. We are not obligated to provide a particular level of '
+          'support, to support particular devices or operating systems '
+          'indefinitely, or to accept all change requests.'),
+      LegalParagraph(
+          'We may discontinue support for an older operating system or device '
+          'as technology evolves, and we may require you to update the '
+          'application in order to continue using it.'),
+    ]),
+    LegalSection(title: '27. Accessibility & Inclusivity', paragraphs: [
+      LegalParagraph(
+          '{b}We are committed to making the Service as accessible and '
+          'inclusive as possible for users of all abilities and backgrounds.'
+          '{/b} We will make reasonable efforts to design the interface to be '
+          'clear, readable, and usable, including support for large text, '
+          'screen readers, high-contrast styling, and localization for '
+          'different languages, including full right-to-left (Arabic) '
+          'localization.'),
+      LegalParagraph(
+          'If you have a disability and encounter difficulty using the '
+          'Service, please contact us so that we can work to address the '
+          'issue, to the extent it is within our technical ability.'),
+    ]),
+    LegalSection(title: '28. Your Feedback & Suggestions', paragraphs: [
+      LegalParagraph(
+          'We welcome your feedback, ideas, and suggestions for improving the '
+          'Service. {b}By submitting feedback, you grant us a non-exclusive, '
+          'royalty-free, worldwide, perpetual license to use, modify, and '
+          'incorporate that feedback into the Service without any '
+          'compensation to you.{/b}'),
+      LegalParagraph(
+          'You agree that you will not submit feedback that contains '
+          'confidential information of a third party, or any content that '
+          'violates these Terms or applicable law.'),
+    ]),
+    LegalSection(title: '29. Third-Party Content & No Endorsement', paragraphs: [
+      LegalParagraph(
+          'The Service may reference, link to, or describe third-party '
+          'translations, tafsir (interpretation) materials, educational '
+          'resources, or websites for the user’s convenience. '
+          '{b}References to third parties are provided for information only '
+          'and do not constitute an endorsement of, or affiliation with, those '
+          'parties unless expressly stated.{/b}'),
+      LegalParagraph(
+          '{b}We do not control, and are not responsible for, the accuracy or '
+          'content of any third-party material. Users are responsible for '
+          'exercising their own judgment and, where appropriate, seeking '
+          'qualified religious or scholarly guidance.{/b}'),
+    ]),
+    LegalSection(title: '30. Your Representations & Responsibilities', paragraphs: [
+      LegalParagraph(
+          'You represent and warrant that: (a) you will provide accurate '
+          'information when using the Service; (b) you will use the Service '
+          'only for lawful, personal, non-commercial purposes consistent with '
+          'these Terms; (c) you will not attempt to impair, circumventing, or '
+          'undermine the security or integrity of the Service; and '
+          '(d) you will not use the Service in any manner that violates '
+          'applicable law.'),
+      LegalParagraph(
+          '{b}You are responsible for how you apply what you learn through the '
+          'Service, and for ensuring that your use of the Service respect the '
+          'rights of others.{/b}'),
+    ]),
+    LegalSection(title: '31. Consumer Rights & Statutory Protections', paragraphs: [
+      LegalParagraph(
+          'Nothing in these Terms is intended to exclude, limit, or restrict '
+          'any rights or remedies that you may have under applicable consumer '
+          'protection or other laws, which cannot be lawfully excluded or '
+          'restricted. Where such mandatory rights apply, they prevail over '
+          'any conflicting provision in these Terms.'),
+      LegalParagraph(
+          '{b}We encourage every user to understand their legal rights.{/b} '
+          'If you believe that a provision of these Terms is inconsistent with '
+          'your statutory rights, or if you have any question about them, '
+          'please contact us so that we can address your concern.'),
+    ]),
+    LegalSection(title: '32. Closing & Acknowledgment', paragraphs: [
+      LegalParagraph(
+          '{b}These Terms represent a respectful and transparent agreement '
+          'between you and AyahPath.{/b} By using the Service, you acknowledge '
+          'that you have read these Terms in their entirety, that they are '
+          'fair and reasonable in the context of the Service being offered '
+          'free of charge and with a strong commitment to privacy, and that '
+          'you are capable of entering into this agreement.'),
+      LegalParagraph(
+          'Thank you for using AyahPath. We are honored to support you on your '
+          'journey of learning and connecting with the Qur’an. If you have any '
+          'questions about these Terms or the Service, please reach out to us '
+          'using the contact details in these Terms — we would love to hear '
+          'from you.'),
+    ]),
   ],
 );
 
 /// Privacy Policy for AyahPath.
 const LegalDocument privacyPolicy = LegalDocument(
   title: 'Privacy Policy',
-  version: '1.0',
+  version: '2.0',
   effectiveDate: 'September 1, 2026',
   intro:
       'At AyahPath, your privacy and trust matter deeply to us. This Privacy '
@@ -833,6 +1005,129 @@ const LegalDocument privacyPolicy = LegalDocument(
           'clearly as possible so that we can assist you effectively. If you '
           'are requesting access to or deletion of your personal information, '
           'please let us know so that we can handle your request correctly.'),
+    ]),
+    LegalSection(title: '17. Legal Bases for Processing', paragraphs: [
+      LegalParagraph(
+          'Where data-protection laws such as the EU General Data Protection '
+          'Regulation (GDPR) or the UK GDPR apply, we rely on one or more of '
+          'the following lawful bases for processing your personal information: '
+          'legitimate interest (in operating and securing the Service and '
+          'improving it for users); performance of a contract (in providing '
+          'the Service you have requested); compliance with a legal obligation; '
+          'and, where appropriate, your consent.'),
+      LegalParagraph(
+          '{b}We process the minimum personal information necessary, and we use '
+          'privacy-friendly measures wherever possible, such as processing '
+          'recitation audio entirely on-device.{/b} If you have questions about '
+          'the legal basis on which we rely, please contact us.'),
+    ]),
+    LegalSection(title: '18. Automated Decision-Making & AI', paragraphs: [
+      LegalParagraph(
+          'The Service includes an on-device AI feature that analyzes your '
+          'recitation and provides feedback, as well as an AI tutor that '
+          'answers your learning questions. {b}These features are assistive '
+          'only: they do not make automated decisions that produce legal '
+          'effects or similarly significant effects about you.{/b}'),
+      LegalParagraph(
+          '{b}Recitation audio is processed entirely on your device and never '
+          'leaves it, and any conversation with the AI tutor is limited to '
+          'learning-related questions.{/b} The AI never creates, alters, or '
+          'reinterprets the revealed Qur’anic text. AI feedback is educational '
+          'advice only and is not guaranteed to be perfectly accurate.'),
+      LegalParagraph(
+          'If you prefer not to use these AI features, you are free not to do '
+          'so; they are optional components of the Service and do not prevent '
+          'you from using the core reading, listening, and memorization '
+          'features.'),
+    ]),
+    LegalSection(title: '19. What We Do NOT Collect', paragraphs: [
+      LegalParagraph(
+          '{b}To be fully transparent, we do NOT collect: your name, phone '
+          'number, physical postal address, precise device location, biometric '
+          'identifiers, browsing history, or any sensitive categories of '
+          'personal data.{/b} We do not collect audio recordings of your '
+          'recitation (these are processed on-device only). We do not require '
+          'your full legal name to use the Service.'),
+      LegalParagraph(
+          '{b}We do not engage in targeted advertising, cross-app or cross-site '
+          'tracking for profiling, or the sale of personal information in any '
+          'form.{/b} If you ever discover the Service collecting something not '
+          'described here, please contact us so we can investigate.'),
+    ]),
+    LegalSection(title: '20. Security Breach & Incident Response', paragraphs: [
+      LegalParagraph(
+          'We maintain reasonable security practices to protect your '
+          'information, including access controls and encryption in transit. '
+          'In the unlikely event of a security incident that affects your '
+          'personal information, we will take prompt steps to respond, '
+          'mitigate, and, where required by applicable law, notify the '
+          'relevant authorities and affected users.'),
+      LegalParagraph(
+          '{b}If you believe you have discovered a security vulnerability, '
+          'please disclose it to us responsibly through our contact details '
+          'rather than exploiting it, so that we can address it and protect '
+          'all users.{/b}'),
+    ]),
+    LegalSection(title: '21. Regional Legal Notices', paragraphs: [
+      LegalParagraph(
+          'California (CCPA/CPRA): If you are a California resident, you have '
+          'the right to know what personal information we collect, to request '
+          'its deletion, to correct inaccuracies, and to be free from '
+          'discrimination for exercising your privacy rights. We do not "sell" '
+          'or "share" personal information as those terms are defined under '
+          'the California Consumer Privacy Act (CCPA), and we do not have any '
+          'actual knowledge of selling or sharing, or using, personal '
+          'information of minors under 16 in a way that would require us to '
+          'provide opt-out rights. You may submit a verifiable request to '
+          'exercise your rights using the contact details in this Policy.'),
+      LegalParagraph(
+          'European Economic Area & UK (GDPR/UK GDPR): If you are located in '
+          'the EEA or the UK, you may have rights to access, rectify, erase, '
+          'restrict, and object to the processing of your personal '
+          'information, and to data portability, as described in Section 10. '
+          'You also have the right to lodge a complaint with your local '
+          'supervisory authority. Section 17 describes the legal bases we rely '
+          'on.'),
+      LegalParagraph(
+          'Children (COPPA & Similar Laws): Because AyahPath welcomes users of '
+          'all ages, and because we collect no advertising, tracking, or '
+          'profiling data and play no marketing to children, we do not collect '
+          'the kind of information governed by laws such as the U.S. Children’s '
+          'Online Privacy Protection Act (COPPA). We recommend that a parent '
+          'or guardian review the Service, these Terms, and this Policy with '
+          'any child who uses it, and parents and guardians may contact us '
+          'with any questions.'),
+      LegalParagraph(
+          'Other Jurisdictions: Residents of other jurisdictions may contact '
+          'us with privacy questions and we will address them in accordance '
+          'with this Policy and applicable law.'),
+    ]),
+    LegalSection(title: '22. Your Consent & How to Change Your Mind', paragraphs: [
+      LegalParagraph(
+          'By using the Service, you consent to the collection, use, '
+          'processing, transfer, and storage of information as described in '
+          'this Privacy Policy. {b}Your official consent is also confirmed '
+          'when you check the required consent box during account creation or '
+          'sign-in.{/b}'),
+      LegalParagraph(
+          'You may change your mind at any time. You can delete your learning '
+          'data or your entire account from within the Service, or contact us '
+          'to exercise any of your privacy rights. {b}Withdrawing consent will '
+          'not affect the lawfulness of processing that occurred before your '
+          'withdrawal.{/b}'),
+    ]),
+    LegalSection(title: '23. Our Commitment & Closing', paragraphs: [
+      LegalParagraph(
+          '{b}Your privacy is a core value of AyahPath, not an afterthought.'
+          '{/b} We have built the Service to collect as little personal '
+          'information as possible, to process your recitation privately on '
+          'your own device, to show no advertising, and to give you control '
+          'over your data.'),
+      LegalParagraph(
+          'Thank you for trusting us to support your journey of learning and '
+          'connecting with the Qur’an. If you ever have any questions, '
+          'comments, or concerns about how your information is handled, please '
+          'do not hesitate to contact us — we will be glad to help.'),
     ]),
   ],
 );

@@ -1,4 +1,5 @@
 import 'skill_type.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Type of a single lesson step.
 enum LessonStepType {
@@ -13,6 +14,26 @@ enum LessonStepType {
   const LessonStepType(this.label);
 
   final String label;
+
+  /// Localized label.
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case LessonStepType.readingWarmup:
+        return l.stepReadingWarmup;
+      case LessonStepType.tajweedPractice:
+        return l.stepTajweedPractice;
+      case LessonStepType.quranReading:
+        return l.stepQuranReading;
+      case LessonStepType.memorization:
+        return l.stepMemorization;
+      case LessonStepType.revision:
+        return l.stepRevision;
+      case LessonStepType.comprehension:
+        return l.stepComprehension;
+      case LessonStepType.assessment:
+        return l.stepAssessment;
+    }
+  }
 }
 
 /// A single step in a lesson.

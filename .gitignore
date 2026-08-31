@@ -57,3 +57,6 @@ firebaserc
 
 # Widget Preview related
 .widget_preview/
+
+# Bundled ML model binaries (downloaded, not source-controlled)
+assets/models/

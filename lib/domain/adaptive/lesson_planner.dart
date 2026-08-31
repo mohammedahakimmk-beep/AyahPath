@@ -1,10 +1,12 @@
 import 'dart:math';
+import 'dart:ui' show Locale;
 
 import '../../data/models/learner_profile.dart';
 import '../../data/models/lesson.dart';
 import '../../data/models/onboarding_profile.dart';
 import '../../data/models/skill_type.dart';
 import '../../data/quran/quran_data.dart';
+import '../../l10n/app_localizations.dart';
 import 'skill_tracker.dart';
 
 /// Generates personalized lesson plans from the learner model.
@@ -17,7 +19,8 @@ class LessonPlanner {
   LessonPlanner._();
 
   /// Builds today's lesson tailored to [profile].
-  static LessonPlan buildDailyPlan(LearnerProfile profile) {
+  static LessonPlan buildDailyPlan(LearnerProfile profile, [AppLocalizations? l]) {
+    final loc = l ?? lookupAppLocalizations(const Locale('en'));
     final goals = profile.onboarding?.goals ?? const [LearningGoal.readQuran];
     final wantsTajweed = goals.contains(LearningGoal.tajweed) ||
         profile.stateOf(SkillType.tajweed).needsPractice;
@@ -39,52 +42,50 @@ class LessonPlanner {
 
     final steps = <LessonStep>[];
 
-    steps.add(_warmup(profile));
+    steps.add(_warmup(profile, loc));
 
     // Targeted practice for the focus skill.
-    steps.add(_focusStep(focus, focusDifficulty, profile));
+    steps.add(_focusStep(focus, focusDifficulty, profile, loc));
 
     // Qur'an reading step (always present).
     final passage = _journeyRange(profile);
     steps.add(LessonStep(
       type: LessonStepType.quranReading,
-      title: _passageTitle(passage),
-      instructions: 'Read aloud slowly and clearly. Listen carefully to each word.',
+      title: _passageTitle(passage, loc),
+      instructions: loc.planReadAloud,
       ayahlRange: passage,
       durationMinutes: 4,
     ));
 
     // Memorization or revision depending on needs.
     if (wantsMemorization) {
-      steps.add(_memorizationStep(profile));
+      steps.add(_memorizationStep(profile, loc));
     }
     if (wantsTajweed && profile.stateOf(SkillType.tajweed).confidence >= 0.45) {
       steps.add(LessonStep(
         type: LessonStepType.tajweedPractice,
-        title: 'Tajweed focus: ${_tajweedTopic(focusDifficulty)}',
-        instructions:
-            'Practice the selected rule gently. If unsure, tap "Ask the tutor" for guidance.',
+        title: loc.planTajweedFocus(_tajweedTopic(focusDifficulty, loc)),
+        instructions: loc.planTajweedInstr,
         skill: SkillType.tajweed,
         durationMinutes: 3,
-        prompt: _tajweedPrompt(focusDifficulty),
+        prompt: _tajweedPrompt(focusDifficulty, loc),
       ));
     }
 
     // Closing assessment on the focus skill.
     steps.add(LessonStep(
       type: LessonStepType.assessment,
-      title: 'Quick check: ${focus.label}',
-      instructions:
-          'Answer a short question to help AyahPath adjust tomorrow’s lesson.',
+      title: loc.planQuickCheck(focus.localizedLabel(loc)),
+      instructions: loc.planAssessmentInstr,
       skill: focus,
-      prompt: _assessmentPrompt(focus, focusDifficulty),
+      prompt: _assessmentPrompt(focus, focusDifficulty, loc),
       durationMinutes: 2,
     ));
 
     final now = DateTime.now();
     return LessonPlan(
       id: 'lesson-${now.millisecondsSinceEpoch}',
-      title: 'Today’s Lesson',
+      title: loc.planTitle,
       createdAt: now,
       estimatedMinutes: steps.fold(0, (s, e) => s + e.durationMinutes),
       steps: steps,
@@ -105,55 +106,27 @@ class LessonPlanner {
     return weakest;
   }
 
-  static LessonStep _warmup(LearnerProfile profile) {
+  static LessonStep _warmup(LearnerProfile profile, AppLocalizations loc) {
     final readingConf = profile.stateOf(SkillType.reading).confidence;
     if (readingConf < 0.35) {
-      return const LessonStep(
+      return LessonStep(
         type: LessonStepType.readingWarmup,
-        title: 'Letter warm-up',
-        instructions:
-            'Review the Arabic letters you find most challenging. Say each one slowly.',
+        title: loc.planWarmupLetters,
+        instructions: loc.planWarmupLettersInstr,
         durationMinutes: 2,
       );
     }
     return LessonStep(
       type: LessonStepType.readingWarmup,
-      title: readingConf < 0.7 ? 'Reading warm-up' : 'Fluency warm-up',
-      instructions:
-          'Read a short passage from your current surah at a gentle pace, then once a little faster.',
+      title: readingConf < 0.7 ? loc.planWarmupReading : loc.planWarmupFluency,
+      instructions: loc.planWarmupInstr,
       durationMinutes: 2,
     );
   }
 
-  static LessonStep _focusStep(SkillType focus, int difficulty, LearnerProfile profile) {
-    const titles = {
-      SkillType.reading: [
-        'Letters & sounds',
-        'Reading words with harakat',
-        'Reading Qur’anic phrases',
-      ],
-      SkillType.tajweed: [
-        'Tajweed foundations',
-        'Practicing madd & ghunnah',
-        'Advanced tajweed rules',
-      ],
-      SkillType.memorization: [
-        'Introducing a new ayah',
-        'Building on today’s ayahs',
-        'Strengthening your Hifz',
-      ],
-      SkillType.revision: [
-        'Refreshing what you know',
-        'Revision & linking ayahs',
-        'Deep revision session',
-      ],
-      SkillType.comprehension: [
-        'Key words & meaning',
-        'Understanding phrases',
-        'Exploring meaning deeply',
-      ],
-    };
-    final list = titles[focus] ?? const ['Focused practice', 'Practice', 'Advanced practice'];
+  static LessonStep _focusStep(
+      SkillType focus, int difficulty, LearnerProfile profile, AppLocalizations loc) {
+    final list = _focusTitles(focus, loc);
     return LessonStep(
       type: focus == SkillType.tajweed
           ? LessonStepType.tajweedPractice
@@ -161,30 +134,44 @@ class LessonPlanner {
               ? LessonStepType.memorization
               : LessonStepType.readingWarmup,
       title: list[difficulty - 1],
-      instructions:
-          'Follow along with the provided exercise. Practice until it feels smooth.',
+      instructions: loc.planFocusInstr,
       skill: focus,
       durationMinutes: 3,
     );
   }
 
-  static LessonStep _memorizationStep(LearnerProfile profile) {
+  static List<String> _focusTitles(SkillType focus, AppLocalizations loc) {
+    switch (focus) {
+      case SkillType.reading:
+        return [loc.planFocusReading1, loc.planFocusReading2, loc.planFocusReading3];
+      case SkillType.tajweed:
+        return [loc.planFocusTajweed1, loc.planFocusTajweed2, loc.planFocusTajweed3];
+      case SkillType.memorization:
+        return [loc.planFocusMemo1, loc.planFocusMemo2, loc.planFocusMemo3];
+      case SkillType.revision:
+        return [loc.planFocusRevision1, loc.planFocusRevision2, loc.planFocusRevision3];
+      case SkillType.comprehension:
+        return [loc.planFocusCompre1, loc.planFocusCompre2, loc.planFocusCompre3];
+      case SkillType.fluency:
+        return [loc.planFocusFluency1, loc.planFocusFluency2, loc.planFocusFluency3];
+    }
+  }
+
+  static LessonStep _memorizationStep(LearnerProfile profile, AppLocalizations loc) {
     final conf = profile.stateOf(SkillType.memorization).confidence;
     if (conf < 0.4) {
-      return const LessonStep(
+      return LessonStep(
         type: LessonStepType.memorization,
-        title: 'Start memorizing',
-        instructions:
-            'Hear an ayah, then repeat it 3 times. Try to say it from memory once.',
+        title: loc.planMemoStart,
+        instructions: loc.planMemoStartInstr,
         skill: SkillType.memorization,
         durationMinutes: 3,
       );
     }
-    return const LessonStep(
+    return LessonStep(
       type: LessonStepType.memorization,
-      title: 'Memorization & revision',
-      instructions:
-          'Recite your recent ayahs from memory, then add one new line using spaced repetition.',
+      title: loc.planMemoReview,
+      instructions: loc.planMemoReviewInstr,
       skill: SkillType.memorization,
       durationMinutes: 3,
     );
@@ -199,42 +186,50 @@ class LessonPlanner {
     return '${surah.number}:1-$count';
   }
 
-  static String _passageTitle(String range) {
+  static String _passageTitle(String range, AppLocalizations loc) {
     final parts = range.split(':');
     final s = parts.isNotEmpty ? QuranDataset.byNumber(int.tryParse(parts[0]) ?? 1) : null;
-    return s == null ? 'Qur’an reading' : 'Reading ${s.englishName}';
+    return s == null ? loc.planQuranReading : loc.planReadingSurah(s.englishName);
   }
 
-  static String _tajweedTopic(int difficulty) {
-    const topics = ['basic madd', 'madd and ghunnah', 'qalqalah and ikhfa'];
-    return topics[difficulty - 1];
+  static String _tajweedTopic(int difficulty, AppLocalizations loc) {
+    switch (difficulty) {
+      case 1:
+        return loc.planTajweedTopic1;
+      case 2:
+        return loc.planTajweedTopic2;
+      default:
+        return loc.planTajweedTopic3;
+    }
   }
 
-  static String _tajweedPrompt(int difficulty) {
-    const prompts = [
-      'Which letter brings a natural elongation (madd)?',
-      'Which rule produces a nasal sound (ghunnah)?',
-      'Which term refers to a voicing bounce (qalqalah)?',
-    ];
-    return prompts[difficulty - 1];
+  static String _tajweedPrompt(int difficulty, AppLocalizations loc) {
+    switch (difficulty) {
+      case 1:
+        return loc.planTajweedPrompt1;
+      case 2:
+        return loc.planTajweedPrompt2;
+      default:
+        return loc.planTajweedPrompt3;
+    }
   }
 
-  static String _assessmentPrompt(SkillType skill, int difficulty) {
+  static String _assessmentPrompt(SkillType skill, int difficulty, AppLocalizations loc) {
     switch (skill) {
       case SkillType.reading:
         return difficulty >= 3
-            ? 'How would you rate your smoothness reading today’s ayah?'
-            : 'Could you read today’s words clearly?';
+            ? loc.planAssessReadingHi
+            : loc.planAssessReadingLo;
       case SkillType.tajweed:
-        return 'How well did you apply today’s tajweed rule?';
+        return loc.planAssessTajweed;
       case SkillType.memorization:
-        return 'How much of today’s memorization can you recall?';
+        return loc.planAssessMemo;
       case SkillType.revision:
-        return 'How confidently did you revise today?';
+        return loc.planAssessRevision;
       case SkillType.comprehension:
-        return 'Could you explain today’s key words?';
+        return loc.planAssessCompre;
       case SkillType.fluency:
-        return 'How fluent did today’s reading feel?';
+        return loc.planAssessFluency;
     }
   }
 

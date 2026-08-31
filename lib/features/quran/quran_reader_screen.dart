@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_widgets.dart';
 import '../../data/quran/quran_data.dart';
 import '../../data/quran/quran_models.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 import '../learn/recitation_practice_screen.dart';
 
@@ -45,17 +46,17 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
     final result = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Note'),
+        title: Text(context.l10n.readerNote),
         content: TextField(
           controller: controller,
           maxLines: 4,
-          decoration: const InputDecoration(hintText: 'Reflection, reference or reminder…'),
+          decoration: InputDecoration(hintText: context.l10n.readerNoteHint),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.readerCancel)),
           FilledButton(
             onPressed: () => Navigator.pop(context, controller.text),
-            child: const Text('Save'),
+            child: Text(context.l10n.readerSave),
           ),
         ],
       ),
@@ -73,7 +74,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
         title: Text(_surah.englishName),
         actions: [
           IconButton(
-            tooltip: 'Recitation practice',
+            tooltip: context.l10n.readerRecitationPractice,
             icon: const Icon(Icons.mic),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
@@ -87,8 +88,8 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
               if (v == 'translit') setState(() => _showTranslit = !_showTranslit);
             },
             itemBuilder: (context) => [
-              CheckedPopupMenuItem(value: 'translation', checked: _showTranslation, child: const Text('Translation')),
-              CheckedPopupMenuItem(value: 'translit', checked: _showTranslit, child: const Text('Transliteration')),
+              CheckedPopupMenuItem(value: 'translation', checked: _showTranslation, child: Text(context.l10n.readerTranslation)),
+              CheckedPopupMenuItem(value: 'translit', checked: _showTranslit, child: Text(context.l10n.readerTransliteration)),
             ],
           ),
         ],
@@ -117,7 +118,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
         const SizedBox(height: 8),
         Text(AppConstants.bismillah, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'AmiriQuran', fontSize: 28, height: 2)),
         const SizedBox(height: 12),
-        Pill(label: '${_surah.revelationPlace} · ${_surah.ayahCount} ayahs'),
+        Pill(label: context.l10n.readerAyahCount(_surah.revelationPlace, _surah.ayahCount)),
         const SizedBox(height: 20),
       ],
     );
@@ -142,7 +143,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
               ),
               const Spacer(),
               IconButton(
-                tooltip: 'Bookmark',
+                tooltip: context.l10n.readerBookmark,
                 visualDensity: VisualDensity.compact,
                 icon: Icon(
                   isBookmarked ? Icons.bookmark : Icons.bookmark_border,
@@ -152,13 +153,13 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
                 onPressed: () => _toggleBookmark(ayahNumber),
               ),
               IconButton(
-                tooltip: 'Add note',
+                tooltip: context.l10n.readerAddNote,
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Icons.note_add_outlined, size: 20),
                 onPressed: () => _addNote(ayahNumber),
               ),
               IconButton(
-                tooltip: memorized >= ayahNumber ? 'Memorized' : 'Mark as memorized',
+                tooltip: memorized >= ayahNumber ? context.l10n.readerMemorized : context.l10n.readerMarkMemorized,
                 visualDensity: VisualDensity.compact,
                 icon: Icon(
                   memorized >= ayahNumber ? Icons.star_rounded : Icons.star_border_rounded,
@@ -169,7 +170,7 @@ class _QuranReaderScreenState extends State<QuranReaderScreen> {
                     ? null
                     : () {
                         app.markAyahMemorized(_surah.number, ayahNumber);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Marked ayah $ayahNumber as memorized')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.readerMarkedMemorized(ayahNumber))));
                       },
               ),
             ],

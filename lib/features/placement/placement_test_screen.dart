@@ -5,6 +5,7 @@ import '../../core/widgets/app_widgets.dart';
 import '../../data/models/skill_type.dart';
 import '../../data/quran/quran_data.dart';
 import '../../domain/adaptive/placement_engine.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
 /// The Quran placement assessment.
@@ -20,7 +21,8 @@ class PlacementTestScreen extends StatefulWidget {
 }
 
 class _PlacementTestScreenState extends State<PlacementTestScreen> {
-  final PlacementEngine _engine = PlacementEngine();
+  late final PlacementEngine _engine =
+      PlacementEngine(pool: PlacementEngine.buildPool(context.l10n));
   int _index = 0;
   final Map<SkillType, List<double>> _scores = {};
 
@@ -66,11 +68,11 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
     final isTrueFalse = item.options == null;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Placement Assessment'),
+        title: Text(context.l10n.placeTitle),
         actions: [
           TextButton(
             onPressed: _finish,
-            child: const Text('Skip'),
+            child: Text(context.l10n.placeSkip),
           ),
         ],
       ),
@@ -81,7 +83,7 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Question ${_index + 1} of ${_engine.pool.length}',
+                context.l10n.placeQuestionCounter((_index + 1).toString(), _engine.pool.length.toString()),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 8),
@@ -133,7 +135,7 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Surah ${surah!.englishName}:${a.ayahNumber}',
+            context.l10n.placeSurahLabel(surah!.englishName, a.ayahNumber.toString()),
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -170,17 +172,17 @@ class _PlacementTestScreenState extends State<PlacementTestScreen> {
         Row(
           children: [
             Expanded(
-              child: _rateButton('Confident', 2, Icons.thumb_up_alt_outlined),
+              child: _rateButton(context.l10n.placeSelfConfident, 2, Icons.thumb_up_alt_outlined),
             ),
             const SizedBox(width: 12),
-            Expanded(child: _rateButton('Needs work', 1, Icons.help_outline)),
+            Expanded(child: _rateButton(context.l10n.placeSelfNeedsWork, 1, Icons.help_outline)),
             const SizedBox(width: 12),
-            Expanded(child: _rateButton('Not yet', 0, Icons.thumb_down_alt_outlined)),
+            Expanded(child: _rateButton(context.l10n.placeSelfNotYet, 0, Icons.thumb_down_alt_outlined)),
           ],
         ),
-        const Text(
-          'Give your best honest self-assessment. AyahPath adapts from here.',
-          style: TextStyle(fontSize: 12),
+        Text(
+          context.l10n.placeSelfHint,
+          style: const TextStyle(fontSize: 12),
           textAlign: TextAlign.center,
         ),
       ],

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'core/theme/app_theme.dart';
+import 'l10n/app_localizations.dart';
+import 'l10n/ext.dart';
 import 'features/auth/login_screen.dart';
 import 'features/learn/recitation_practice_screen.dart';
 import 'features/onboarding/onboarding_flow.dart';
@@ -98,6 +101,14 @@ class _AyahPathAppState extends State<AyahPathApp> {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: app.themeMode,
+      locale: app.locale,
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      localizationsDelegates: [
+        ...AppLocalizations.localizationsDelegates,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       routes: {
         '/recite': (_) => const RecitationPracticeScreen(),
         '/home': (_) => const AppShell(),
@@ -120,6 +131,13 @@ class _AyahPathAppState extends State<AyahPathApp> {
   Widget _buildSplash() {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      localizationsDelegates: [
+        ...AppLocalizations.localizationsDelegates,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: Scaffold(
         backgroundColor: const Color(0xFFF0F4F8),
         body: Center(
@@ -141,9 +159,9 @@ class _AyahPathAppState extends State<AyahPathApp> {
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E)),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Checking for updates...',
-                style: TextStyle(fontSize: 14, color: Color(0xFF666666)),
+              Text(
+                context.l10n.checkingForUpdates,
+                style: const TextStyle(fontSize: 14, color: Color(0xFF666666)),
               ),
               const SizedBox(height: 24),
               const CircularProgressIndicator(color: Color(0xFF1B5E20)),
@@ -157,6 +175,13 @@ class _AyahPathAppState extends State<AyahPathApp> {
   // Non-blocking full-screen mandatory update view.
   Widget _buildMandatoryUpdate(UpdateInfo update) {    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      localizationsDelegates: [
+        ...AppLocalizations.localizationsDelegates,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: Scaffold(
         backgroundColor: const Color(0xFFF0F4F8),
         body: PopScope(
@@ -169,19 +194,19 @@ class _AyahPathAppState extends State<AyahPathApp> {
                 children: [
                   const Icon(Icons.system_update, size: 72, color: Color(0xFFB04A3A)),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Update Required',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E)),
+                  Text(
+                    context.l10n.updateRequired,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E)),
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Version ${update.latestVersion}',
+                    context.l10n.updateVersionLabel(update.latestVersion),
                     style: const TextStyle(fontSize: 16, color: Color(0xFF666666)),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     update.releaseNotes.isEmpty
-                        ? 'An important update is available. Please download and install the latest version to continue using AyahPath.'
+                        ? context.l10n.updateRequiredMessage
                         : update.releaseNotes,
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 14, color: Color(0xFF444444), height: 1.4),
@@ -191,7 +216,7 @@ class _AyahPathAppState extends State<AyahPathApp> {
                     ElevatedButton.icon(
                       onPressed: () => _openDownload(update.downloadUrl),
                       icon: const Icon(Icons.download),
-                      label: const Text('Download Update'),
+                      label: Text(context.l10n.downloadUpdate),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1B5E20),
                         foregroundColor: Colors.white,
@@ -235,9 +260,9 @@ class _AuthLoadingScreen extends StatelessWidget {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E)),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Preparing your journey...',
-              style: TextStyle(fontSize: 14, color: Color(0xFF666666)),
+            Text(
+              context.l10n.preparingJourney,
+              style: const TextStyle(fontSize: 14, color: Color(0xFF666666)),
             ),
             const SizedBox(height: 24),
             const CircularProgressIndicator(color: Color(0xFF1B5E20)),

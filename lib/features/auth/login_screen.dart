@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
 import '../../data/legal/legal_content.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 import 'legal_screen.dart';
 
@@ -37,12 +38,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _submit() async {
+    final l = context.l10n;
     setState(() => _error = null);
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     if (!_agree) {
-      setState(() => _error =
-          'Please accept the Terms of Service and Privacy Policy to continue.');
+      setState(() => _error = l.loginErrorAgreeRequired);
       return;
     }
 
@@ -56,82 +57,83 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       // Auth success switches the app into the main flow automatically.
     } on FirebaseAuthException catch (e) {
-      setState(() => _error = _messageFor(e.code));
+      setState(() => _error = _messageFor(context, e.code));
     } catch (_) {
-      setState(() => _error =
-          'Something went wrong. Please check your connection and try again.');
+      setState(() => _error = l.loginErrorGeneric);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
   Future<void> _signInWithGoogle() async {
+    final l = context.l10n;
     setState(() => _error = null);
     if (!_agree) {
-      setState(() => _error =
-          'Please accept the Terms of Service and Privacy Policy to continue.');
+      setState(() => _error = l.loginErrorAgreeRequired);
       return;
     }
     setState(() => _busy = true);
     try {
       await context.read<AppState>().signInWithGoogle();
     } on FirebaseAuthException catch (e) {
-      setState(() => _error = _messageFor(e.code));
+      setState(() => _error = _messageFor(context, e.code));
     } catch (_) {
-      setState(() => _error =
-          'Google sign-in failed. Please check your connection and try again.');
+      setState(() => _error = l.loginErrorGoogleFailed);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
   Future<void> _forgotPassword() async {
+    final l = context.l10n;
     if (_email.text.trim().isEmpty) {
-      setState(() => _error = 'Enter your email address first.');
+      setState(() => _error = l.loginErrorEnterEmail);
       return;
     }
     try {
       await context.read<AppState>().sendPasswordReset(email: _email.text.trim());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password reset email sent if that account exists.')),
+          SnackBar(content: Text(l.loginSnackResetSent)),
         );
       }
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not send a reset email. Please try again.')),
+          SnackBar(content: Text(l.loginSnackResetFailed)),
         );
       }
     }
   }
 
-  String _messageFor(String code) {
+  String _messageFor(BuildContext context, String code) {
+    final l = context.l10n;
     switch (code) {
       case 'user-not-found':
       case 'wrong-password':
       case 'invalid-credential':
-        return 'Incorrect email or password.';
+        return l.loginErrorIncorrectCredentials;
       case 'user-disabled':
-        return 'This account has been disabled.';
+        return l.loginErrorUserDisabled;
       case 'email-already-in-use':
-        return 'An account with this email already exists.';
+        return l.loginErrorEmailInUse;
       case 'invalid-email':
-        return 'Please enter a valid email address.';
+        return l.loginErrorInvalidEmail;
       case 'weak-password':
-        return 'Password must be at least 6 characters.';
+        return l.loginErrorWeakPassword;
       case 'operation-not-allowed':
-        return 'This sign-in method is not enabled.';
+        return l.loginErrorMethodNotAllowed;
       case 'too-many-requests':
-        return 'Too many attempts. Please wait and try again.';
+        return l.loginErrorTooManyRequests;
       default:
-        return 'Authentication failed. Please try again.';
+        return l.loginErrorAuthFailed;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = context.l10n;
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -148,13 +150,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     Icon(Icons.menu_book_rounded, size: 64, color: theme.colorScheme.primary),
                     const SizedBox(height: 12),
                     Text(
-                      'AyahPath',
+                      l.loginTitle,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _isSignUp ? 'Create your account' : 'Sign in to continue',
+                      _isSignUp ? l.loginSubtitleCreate : l.loginSubtitleSignIn,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                     ),
@@ -163,31 +165,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _email,
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l.loginEmail,
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        border: const OutlineInputBorder(),
                       ),
-                      validator: (v) => (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
+                      validator: (v) => (v == null || !v.contains('@')) ? l.loginValidatorEmail : null,
                     ),
                     const SizedBox(height: 14),
                     TextFormField(
                       controller: _password,
                       obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock_outline),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: l.loginPassword,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (v) =>
-                          (v == null || v.length < 6) ? 'At least 6 characters' : null,
+                          (v == null || v.length < 6) ? l.loginValidatorPassword : null,
                     ),
                     if (!_isSignUp)
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: _forgotPassword,
-                          child: const Text('Forgot password?'),
+                          child: Text(l.loginForgotPassword),
                         ),
                       ),
                     const SizedBox(height: 12),
@@ -215,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? const SizedBox(
                               width: 20, height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2))
-                          : Text(_isSignUp ? 'Create account' : 'Sign in'),
+                          : Text(_isSignUp ? l.loginCreateAccount : l.loginSignIn),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -223,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const Expanded(child: Divider()),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text('OR', style: theme.textTheme.bodySmall),
+                          child: Text(l.loginOr, style: theme.textTheme.bodySmall),
                         ),
                         const Expanded(child: Divider()),
                       ],
@@ -232,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     OutlinedButton.icon(
                       onPressed: _busy ? null : _signInWithGoogle,
                       icon: const Icon(Icons.g_mobiledata, size: 28),
-                      label: const Text('Continue with Google'),
+                      label: Text(l.loginContinueWithGoogle),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
@@ -244,16 +246,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         _error = null;
                       }),
                       child: Text(
-                        _isSignUp
-                            ? 'Already have an account? Sign in'
-                            : 'New here? Create an account',
+                        _isSignUp ? l.loginSwitchToSignIn : l.loginSwitchToSignUp,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Your recitation audio is analyzed on-device. Account data (profile & progress) is stored securely online for syncing.',
+                    Text(
+                      l.loginPrivacyNotice,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12, height: 1.4),
+                      style: const TextStyle(fontSize: 12, height: 1.4),
                     ),
                   ],
                 ),
@@ -285,6 +285,7 @@ class _ConsentBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       child: Row(
@@ -299,14 +300,14 @@ class _ConsentBox extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(height: 1.4),
                   children: [
-                    const TextSpan(text: 'I agree to the '),
+                    TextSpan(text: l.loginConsentAgree),
                     WidgetSpan(
                       alignment: PlaceholderAlignment.baseline,
                       baseline: TextBaseline.alphabetic,
                       child: GestureDetector(
                         onTap: onTerms,
                         child: Text(
-                          'Terms of Service',
+                          l.loginConsentTerms,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w700,
@@ -314,14 +315,14 @@ class _ConsentBox extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const TextSpan(text: ' and '),
+                    TextSpan(text: l.loginConsentAnd),
                     WidgetSpan(
                       alignment: PlaceholderAlignment.baseline,
                       baseline: TextBaseline.alphabetic,
                       child: GestureDetector(
                         onTap: onPrivacy,
                         child: Text(
-                          'Privacy Policy',
+                          l.loginConsentPrivacy,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w700,
@@ -329,7 +330,7 @@ class _ConsentBox extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const TextSpan(text: ' required to use AyahPath.'),
+                    TextSpan(text: l.loginConsentRequired),
                   ],
                 ),
               ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_widgets.dart';
+import '../../l10n/ext.dart';
 import '../../data/models/skill_type.dart';
 import '../../data/quran/quran_data.dart';
 import '../../data/quran/quran_models.dart';
@@ -121,10 +122,10 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recitation Practice'),
+        title: Text(context.l10n.recTitle),
         actions: [
           Pill(
-            label: local ? 'On-device' : 'Cloud',
+            label: local ? context.l10n.recOnDevice : context.l10n.recCloud,
             icon: local ? Icons.lock_outline : Icons.cloud_outlined,
           ),
           const SizedBox(width: 12),
@@ -139,7 +140,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
                 Expanded(
                   child: DropdownButtonFormField<int>(
                     initialValue: _surahNumber,
-                    decoration: const InputDecoration(labelText: 'Surah'),
+                    decoration: InputDecoration(labelText: context.l10n.recSurahLabel),
                     items: QuranDataset.all
                         .map((s) => DropdownMenuItem(
                               value: s.number,
@@ -175,7 +176,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
   Widget _ayahCountSelector() {
     return DropdownButtonFormField<int>(
       initialValue: _ayahCount,
-      decoration: const InputDecoration(labelText: 'Ayahs'),
+      decoration: InputDecoration(labelText: context.l10n.recAyahsLabel),
       items: [for (var i = 1; i <= _maxAyahs(_surahNumber); i++) DropdownMenuItem(value: i, child: Text('$i'))],
       onChanged: (v) {
         if (v != null) setState(() => _ayahCount = v);
@@ -225,7 +226,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
                   Icon(Icons.mic_none_rounded, size: 64, color: Theme.of(context).colorScheme.onPrimary),
                   const SizedBox(height: 12),
                   Text(
-                    'Recite the passage above, then stop when finished.',
+                    context.l10n.recReadyInstruction,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, height: 1.4),
                   ),
@@ -246,8 +247,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Voice model not installed — you’ll get an assistive preview. '
-                        'Install it in Profile → Model Manager for fuller analysis.',
+                        context.l10n.recModelNotInstalled,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
@@ -260,7 +260,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
               child: FilledButton.icon(
                 onPressed: _start,
                 icon: const Icon(Icons.mic),
-                label: const Text('Start Recitation'),
+                label: Text(context.l10n.recStartRecitation),
               ),
             ),
           ],
@@ -271,17 +271,17 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
             _pulseMic(),
             const SizedBox(height: 16),
             Text(
-              'Listening… ${_elapsed.inSeconds}s',
+              context.l10n.recListening(_elapsed.inSeconds),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            Text('Processing locally on your device', style: Theme.of(context).textTheme.bodySmall),
+            Text(context.l10n.recProcessingLocal, style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: _stop,
-                child: const Text('I’ve finished reciting'),
+                child: Text(context.l10n.recFinishedReciting),
               ),
             ),
           ],
@@ -292,7 +292,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
             const SizedBox(height: 40),
             const CircularProgressIndicator(),
             const SizedBox(height: 16),
-            Text('Analyzing your recitation on-device…', style: Theme.of(context).textTheme.bodyMedium),
+            Text(context.l10n.recAnalyzingOnDevice, style: Theme.of(context).textTheme.bodyMedium),
           ],
         );
       case _Phase.feedback:
@@ -334,15 +334,15 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
             children: [
               Row(
                 children: [
-                  Text('Reading feedback', style: Theme.of(context).textTheme.titleLarge),
+                  Text(context.l10n.recReadingFeedback, style: Theme.of(context).textTheme.titleLarge),
                   const Spacer(),
                   Text('$pct%', style: TextStyle(color: scheme.primary, fontWeight: FontWeight.w800, fontSize: 20)),
                 ],
               ),
               const SizedBox(height: 12),
-              SkillBar(label: 'Fluency', percent: f.fluency, color: SkillColors.reading),
+              SkillBar(label: SkillType.fluency.localizedLabel(context.l10n), percent: f.fluency, color: SkillColors.reading),
               const SizedBox(height: 10),
-              Text('Pauses detected: ${f.pauses}', style: Theme.of(context).textTheme.bodyMedium),
+              Text(context.l10n.recPausesDetected(f.pauses), style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),
@@ -352,7 +352,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Words that may have been missed', style: Theme.of(context).textTheme.titleMedium),
+                Text(context.l10n.recMissedWords, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 6),
                 Wrap(spacing: 6, runSpacing: 6, children: f.missedWords.map((w) => Chip(label: Text(w))).toList()),
               ],
@@ -364,7 +364,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Possible substitutions', style: Theme.of(context).textTheme.titleMedium),
+                Text(context.l10n.recPossibleSubstitutions, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 6),
                 Wrap(
                   spacing: 6,
@@ -404,8 +404,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
             borderRadius: BorderRadius.circular(14),
           ),
           child: Text(
-            'AI feedback is assistive. For Tajweed and pronunciation accuracy, '
-            'please consult a qualified Quran teacher when appropriate.',
+            context.l10n.recAiDisclaimer,
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),
@@ -413,13 +412,13 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
         Row(
           children: [
             Expanded(
-              child: OutlinedButton(onPressed: _reset, child: const Text('Try again')),
+              child: OutlinedButton(onPressed: _reset, child: Text(context.l10n.recTryAgain)),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: FilledButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Done'),
+                child: Text(context.l10n.recDone),
               ),
             ),
           ],

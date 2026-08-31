@@ -16,6 +16,7 @@ import '../domain/adaptive/surah_lesson_generator.dart';
 import '../domain/model/model_manager_service.dart';
 import '../domain/voice/voice_analysis_service.dart';
 import '../domain/voice/whisper_voice_analysis.dart';
+import '../l10n/app_localizations.dart';
 import 'auth_service.dart';
 
 /// Central application state: the learner model + per-cycle lesson plan.
@@ -68,6 +69,26 @@ class AppState extends ChangeNotifier {
 
   ThemeMode themeMode = ThemeMode.system;
   bool notificationsEnabled = true;
+
+  /// Interface language (language code, e.g. 'en' or 'ar').
+  ///
+  /// Applied immediately when selected during onboarding and persisted with
+  /// the profile so the whole app (including the rest of onboarding) renders
+  /// in the chosen language and RTL direction.
+  String languageCode = 'en';
+
+  /// Whether the app currently uses an RTL layout.
+  bool get isRtl => languageCode == 'ar';
+
+  Locale get locale => Locale(languageCode);
+
+  /// Changes the interface language immediately and notifies listeners so the
+  /// MaterialApp (locale + text direction) rebuilds in real time.
+  void setAppLanguage(String code) {
+    if (languageCode == code) return;
+    languageCode = code;
+    notifyListeners();
+  }
 
   // ---------- Surah lesson tracking ----------
 
@@ -145,6 +166,7 @@ class AppState extends ChangeNotifier {
     completedLessonIds.clear();
     masteryScores.clear();
     dataReady = false;
+    languageCode = 'en';
   }
 
   Future<void> _load() async {
@@ -156,6 +178,10 @@ class AppState extends ChangeNotifier {
     final json = await _store.loadLearnerProfile();
     if (json != null) {
       profile = LearnerProfile.fromJson(json);
+      final saved = profile.onboarding?.locale.languageCode;
+      if (saved != null && saved.isNotEmpty) {
+        languageCode = saved;
+      }
     }
 
     final savedLessonIds = await _store.loadCompletedLessonIds();
@@ -227,6 +253,7 @@ class AppState extends ChangeNotifier {
   // ---------- Onboarding ----------
 
   Future<void> completeOnboarding(OnboardingProfile onboarding) async {
+    languageCode = onboarding.locale.languageCode;
     profile = ProfileSeeder.seed(onboarding);
     profile.onboardingCompleted = true;
     _generateLesson();
@@ -266,7 +293,8 @@ class AppState extends ChangeNotifier {
   // ---------- Lesson planning ----------
 
   void _generateLesson() {
-    currentLesson = LessonPlanner.buildDailyPlan(profile);
+    currentLesson =
+        LessonPlanner.buildDailyPlan(profile, lookupAppLocalizations(locale));
   }
 
   /// Rebuilds today's lesson after any profile change.

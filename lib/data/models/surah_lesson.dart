@@ -1,3 +1,5 @@
+import '../../l10n/app_localizations.dart';
+
 /// Represents the sequential phases of a Surah-based lesson.
 ///
 /// Each lesson follows: Listen & Repeat → Read Alone → AI Test → (optional) Translation.
@@ -11,6 +13,34 @@ enum LessonPhase {
   const LessonPhase(this.label, this.description);
   final String label;
   final String description;
+
+  /// Localized label.
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case LessonPhase.listenRepeat:
+        return l.phaseListenRepeat;
+      case LessonPhase.readAlone:
+        return l.phaseReadAlone;
+      case LessonPhase.aiTest:
+        return l.phaseAiTest;
+      case LessonPhase.translationStudy:
+        return l.phaseTranslationStudy;
+    }
+  }
+
+  /// Localized description.
+  String localizedDescription(AppLocalizations l) {
+    switch (this) {
+      case LessonPhase.listenRepeat:
+        return l.phaseListenRepeatDesc;
+      case LessonPhase.readAlone:
+        return l.phaseReadAloneDesc;
+      case LessonPhase.aiTest:
+        return l.phaseAiTestDesc;
+      case LessonPhase.translationStudy:
+        return l.phaseTranslationStudyDesc;
+    }
+  }
 }
 
 /// A single ayah range within a lesson.
@@ -76,6 +106,12 @@ class SurahLesson {
   String get displayTitle {
     if (isSinglePart) return surahEnglishName;
     return '$surahEnglishName (Part $partNumber/$totalParts)';
+  }
+
+  /// Localized display title (used only where the part suffix is localized).
+  String localizedDisplayTitle(AppLocalizations l) {
+    if (isSinglePart) return surahEnglishName;
+    return '$surahEnglishName (${l.partLabel} $partNumber/$totalParts)';
   }
 
   Map<String, dynamic> toJson() => {

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
 import '../../data/models/skill_type.dart';
+import '../../l10n/ext.dart';
 import '../../data/quran/quran_data.dart';
 import '../../services/app_state.dart';
 import '../learn/recitation_practice_screen.dart';
@@ -14,18 +15,18 @@ class PracticeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Practice')),
+      appBar: AppBar(title: Text(context.l10n.practiceTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: [
             _primeAction(context),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'Quick assessment'),
+            SectionHeader(title: context.l10n.practiceQuickAssessment),
             const SizedBox(height: 12),
             _assessmentCard(context),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'Hifz & revision'),
+            SectionHeader(title: context.l10n.practiceHifzRevision),
             const SizedBox(height: 12),
             _revisionCard(context),
           ],
@@ -50,7 +51,7 @@ class PracticeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Start Recitation',
+                  context.l10n.practiceStartRecitation,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontSize: 18,
@@ -58,7 +59,7 @@ class PracticeScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  app.voice.isLocal ? 'Analyzed on-device · private' : 'Cloud analysis',
+                  app.voice.isLocal ? context.l10n.practiceAnalyzedOnDevice : context.l10n.practiceCloudAnalysis,
                   style: TextStyle(color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.85), fontSize: 13),
                 ),
               ],
@@ -75,7 +76,7 @@ class PracticeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Assess a skill', style: Theme.of(context).textTheme.titleMedium),
+          Text(context.l10n.practiceAssessSkill, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12),
           for (final skill in SkillType.values.take(4))
             Padding(
@@ -88,11 +89,11 @@ class PracticeScreen extends StatelessWidget {
   }
 
   Widget _assessRow(BuildContext context, SkillType skill) {
-    const labels = ['Tough', 'Okay', 'Good', 'Easy'];
+    final labels = [context.l10n.practiceTough, context.l10n.practiceOkay, context.l10n.practiceGood, context.l10n.practiceEasy];
     return Row(
       children: [
         Expanded(
-          child: Text(skill.label, style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(skill.localizedLabel(context.l10n), style: Theme.of(context).textTheme.bodyMedium),
         ),
         for (var r = 1; r <= 4; r++)
           IconButton(
@@ -103,7 +104,7 @@ class PracticeScreen extends StatelessWidget {
               await context.read<AppState>().applyAssessment(skill, r);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${skill.label}: ${labels[r - 1]} recorded')),
+                  SnackBar(content: Text(context.l10n.practiceAssessmentRecorded(skill.localizedLabel(context.l10n), labels[r - 1]))),
                 );
               }
             },
@@ -116,22 +117,22 @@ class PracticeScreen extends StatelessWidget {
     final app = Provider.of<AppState>(context);
     final due = app.profile.surahsNeedingReview();
     if (due.isEmpty) {
-      return const AppCard(
-        child: Text('No surahs due for revision right now. Keep your steady rhythm going.'),
+      return AppCard(
+        child: Text(context.l10n.practiceNoSurahsDue),
       );
     }
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Due for revision', style: Theme.of(context).textTheme.titleMedium),
+          Text(context.l10n.practiceDueForRevision, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 10),
           for (final entry in due)
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.refresh_rounded, color: Color(0xFF8A5BB0)),
               title: Text(entry.surahName),
-              subtitle: Text('${entry.reviewIntervalDays} day interval'),
+              subtitle: Text(context.l10n.practiceDayInterval(entry.reviewIntervalDays)),
               trailing: FilledButton.tonal(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -140,7 +141,7 @@ class PracticeScreen extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Review'),
+                child: Text(context.l10n.practiceReview),
               ),
             ),
         ],
@@ -157,7 +158,7 @@ class _ReciteSurahScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final surah = QuranDataset.byNumber(surahNumber);
     return Scaffold(
-      appBar: AppBar(title: Text(surah?.englishName ?? 'Revise')),
+      appBar: AppBar(title: Text(surah?.englishName ?? context.l10n.practiceRevise)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -170,7 +171,7 @@ class _ReciteSurahScreen extends StatelessWidget {
                   children: [
                     Icon(Icons.menu_book, size: 64, color: Theme.of(context).colorScheme.primary),
                     const SizedBox(height: 12),
-                    Text('Recite ${surah?.englishName ?? ''} from memory, then mark how it went.', textAlign: TextAlign.center),
+                    Text(context.l10n.practiceReciteFromMemory(surah?.englishName ?? ''), textAlign: TextAlign.center),
                   ],
                 ),
               ),
@@ -183,7 +184,7 @@ class _ReciteSurahScreen extends StatelessWidget {
                         context.read<AppState>().reviewMemorized(surahNumber, strong: false);
                         if (context.mounted) Navigator.pop(context);
                       },
-                      child: const Text('Needs more work'),
+                      child: Text(context.l10n.practiceNeedsMoreWork),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -193,7 +194,7 @@ class _ReciteSurahScreen extends StatelessWidget {
                         context.read<AppState>().reviewMemorized(surahNumber, strong: true);
                         if (context.mounted) Navigator.pop(context);
                       },
-                      child: const Text('Recited well'),
+                      child: Text(context.l10n.practiceRecitedWell),
                     ),
                   ),
                 ],

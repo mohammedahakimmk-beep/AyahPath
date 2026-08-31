@@ -1,6 +1,9 @@
+import 'package:flutter/widgets.dart';
+
 import '../../data/models/skill_type.dart';
 import '../../data/quran/quran_data.dart';
 import '../../data/quran/quran_models.dart';
+import '../../l10n/app_localizations.dart';
 
 /// A single placement question/activity.
 class PlacementItem {
@@ -52,89 +55,92 @@ class PlacementResult {
 /// Difficulty adapts based on the learner's answers: correct answers push
 /// difficulty up, mistakes pull it back down. Never overwhelms beginners.
 class PlacementEngine {
-  PlacementEngine({List<PlacementItem>? pool}) : _pool = pool ?? defaultPool;
+  PlacementEngine({List<PlacementItem>? pool}) : _pool = pool ?? buildPool();
 
   final List<PlacementItem> _pool;
 
   /// The items for the current assessment run.
   List<PlacementItem> get pool => _pool;
 
-  static final List<PlacementItem> defaultPool = <PlacementItem>[
-    // ---- READING ----
-    const PlacementItem(
-      skill: SkillType.reading,
-      difficulty: 1,
-      prompt: 'Can you recognize these letters:',
-      options: ['Yes, I recognize them', 'Some of them', 'Not yet'],
-      correctIndex: 0,
-    ),
-    const PlacementItem(
-      skill: SkillType.reading,
-      difficulty: 2,
-      prompt: 'Do you read words with harakat comfortably?',
-      options: ['Yes, comfortably', 'With effort', 'Not yet'],
-      correctIndex: 0,
-    ),
-    const PlacementItem(
-      skill: SkillType.reading,
-      difficulty: 3,
-      prompt: 'Can you read Quranic text without transliteration?',
-      options: ['Yes, fluently', 'Mostly', 'Not yet'],
-      correctIndex: 0,
-    ),
-    // ---- TAJWEED ----
-    const PlacementItem(
-      skill: SkillType.tajweed,
-      difficulty: 1,
-      prompt: 'Do you know what madd (elongation) means?',
-      options: ['Yes', 'I’ve heard of it', 'No'],
-      correctIndex: 0,
-    ),
-    const PlacementItem(
-      skill: SkillType.tajweed,
-      difficulty: 2,
-      prompt: 'Can you identify ghunnah (nasal sound) in your recitation?',
-      options: ['Yes', 'Somewhat', 'No'],
-      correctIndex: 0,
-    ),
-    const PlacementItem(
-      skill: SkillType.tajweed,
-      difficulty: 3,
-      prompt: 'Have you studied rules like qalqalah and ikhfa?',
-      options: ['Yes, in depth', 'Briefly', 'No'],
-      correctIndex: 0,
-    ),
-    // ---- MEMORIZATION ----
-    const PlacementItem(
-      skill: SkillType.memorization,
-      difficulty: 1,
-      prompt: 'How many short surahs can you recite from memory?',
-      options: ['Many / most', 'A few', 'None yet'],
-      correctIndex: 0,
-    ),
-    const PlacementItem(
-      skill: SkillType.memorization,
-      difficulty: 2,
-      prompt: 'Can you continue Al-Fatihah from memory to completion?',
-      options: ['Yes, fully', 'Partly', 'No'],
-      correctIndex: 0,
-    ),
-    // ---- COMPREHENSION ----
-    const PlacementItem(
-      skill: SkillType.comprehension,
-      difficulty: 1,
-      prompt: 'Do you understand common Quranic words like "رَبّ" (Lord)?',
-      options: ['Yes', 'Some', 'No'],
-      correctIndex: 0,
-    ),
-    const PlacementItem(
-      skill: SkillType.comprehension,
-      difficulty: 2,
-      prompt: 'Can you explain the meaning of "Alhamdu lillah"?',
-      options: ['Yes', 'Roughly', 'No'],
-      correctIndex: 0,
-    ),
-  ];
+  static List<PlacementItem> buildPool([AppLocalizations? l]) {
+    l ??= lookupAppLocalizations(const Locale('en'));
+    return <PlacementItem>[
+      // ---- READING ----
+      PlacementItem(
+        skill: SkillType.reading,
+        difficulty: 1,
+        prompt: l.plReadingLettersPrompt,
+        options: [l.plYesRecognize, l.plSomeRecognize, l.plNotYet],
+        correctIndex: 0,
+      ),
+      PlacementItem(
+        skill: SkillType.reading,
+        difficulty: 2,
+        prompt: l.plReadingHarakatPrompt,
+        options: [l.plYesComfortably, l.plWithEffort, l.plNotYet],
+        correctIndex: 0,
+      ),
+      PlacementItem(
+        skill: SkillType.reading,
+        difficulty: 3,
+        prompt: l.plReadingNoTranslitPrompt,
+        options: [l.plYesFluently, l.plMostly, l.plNotYet],
+        correctIndex: 0,
+      ),
+      // ---- TAJWEED ----
+      PlacementItem(
+        skill: SkillType.tajweed,
+        difficulty: 1,
+        prompt: l.plTajweedMaddPrompt,
+        options: [l.plYes, l.plHeardOfIt, l.plNo],
+        correctIndex: 0,
+      ),
+      PlacementItem(
+        skill: SkillType.tajweed,
+        difficulty: 2,
+        prompt: l.plTajweedGhunnahPrompt,
+        options: [l.plYes, l.plSomewhat, l.plNo],
+        correctIndex: 0,
+      ),
+      PlacementItem(
+        skill: SkillType.tajweed,
+        difficulty: 3,
+        prompt: l.plTajweedRulesPrompt,
+        options: [l.plYesInDepth, l.plBriefly, l.plNo],
+        correctIndex: 0,
+      ),
+      // ---- MEMORIZATION ----
+      PlacementItem(
+        skill: SkillType.memorization,
+        difficulty: 1,
+        prompt: l.plMemShortSurahsPrompt,
+        options: [l.plManyMost, l.plAFew, l.plNoneYet],
+        correctIndex: 0,
+      ),
+      PlacementItem(
+        skill: SkillType.memorization,
+        difficulty: 2,
+        prompt: l.plMemFatihahPrompt,
+        options: [l.plYesFully, l.plPartly, l.plNo],
+        correctIndex: 0,
+      ),
+      // ---- COMPREHENSION ----
+      PlacementItem(
+        skill: SkillType.comprehension,
+        difficulty: 1,
+        prompt: l.plCompRabbPrompt,
+        options: [l.plYes, l.plSomeRecognize, l.plNo],
+        correctIndex: 0,
+      ),
+      PlacementItem(
+        skill: SkillType.comprehension,
+        difficulty: 2,
+        prompt: l.plCompAlhamduPrompt,
+        options: [l.plYes, l.plRoughly, l.plNo],
+        correctIndex: 0,
+      ),
+    ];
+  }
 
   /// A short, Quran-focused reading passage used with the voice practice.
   List<Ayah> readingPassage(int surah, int count) {

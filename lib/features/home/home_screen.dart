@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_widgets.dart';
 import '../../data/models/skill_type.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 import '../learn/surah_lesson_player_screen.dart';
 import '../practice/practice_screen.dart';
@@ -25,10 +26,10 @@ class HomeScreen extends StatelessWidget {
               children: [
                 _Header(streak: p.currentStreak),
                 const SizedBox(height: 8),
-                Text('Continue your learning', style: Theme.of(context).textTheme.titleLarge),
+                Text(context.l10n.homeContinueLearning, style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 4),
                 Text(
-                  '${p.journeySurahName ?? 'Al-Mulk'} · ${p.lessonsCompleted} lessons completed',
+                  '${p.journeySurahName ?? 'Al-Mulk'} · ${context.l10n.homeLessonsCompleted(p.lessonsCompleted)}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 18),
@@ -36,15 +37,15 @@ class HomeScreen extends StatelessWidget {
                   onTap: () => _openNextLesson(context),
                 ),
                 const SizedBox(height: 22),
-                const SectionHeader(title: 'Your skills'),
+                SectionHeader(title: context.l10n.homeYourSkills),
                 const SizedBox(height: 12),
                 _SkillsOverview(),
                 const SizedBox(height: 22),
-                const SectionHeader(title: 'Recommended practice'),
+                SectionHeader(title: context.l10n.homeRecommendedPractice),
                 const SizedBox(height: 12),
                 _Recommended(),
                 const SizedBox(height: 22),
-                const SectionHeader(title: 'Current Journey'),
+                SectionHeader(title: context.l10n.homeCurrentJourney),
                 const SizedBox(height: 12),
                 _JourneyCard(),
               ],
@@ -91,9 +92,9 @@ class _Header extends StatelessWidget {
                       color: scheme.primary,
                     ),
               ),
-              const Text(
-                'Peaceful daily guidance',
-                style: TextStyle(fontSize: 13),
+              Text(
+                context.l10n.homePeacefulGuidance,
+                style: const TextStyle(fontSize: 13),
               ),
             ],
           ),
@@ -108,7 +109,7 @@ class _Header extends StatelessWidget {
             children: [
               Icon(Icons.local_fire_department, color: AppColors.gold, size: 18),
               const SizedBox(width: 6),
-              Text('$streak day streak', style: const TextStyle(fontWeight: FontWeight.w800)),
+              Text(context.l10n.homeDayStreak(streak), style: const TextStyle(fontWeight: FontWeight.w800)),
             ],
           ),
         ),
@@ -130,10 +131,10 @@ class _TodayLessonCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final title = next != null
         ? next.displayTitle
-        : (lesson?.title ?? 'Today’s Lesson');
+        : (lesson?.title ?? context.l10n.homeTodayLesson);
     final subtitle = next != null
-        ? 'Ayahs ${next.ayahRange.fromAyah}-${next.ayahRange.toAyah} • ${next.ayahRange.ayahCount} ayahs'
-        : '${lesson?.steps.length ?? 5} steps · $minutes minutes';
+        ? context.l10n.homeAyahRange(next.ayahRange.fromAyah, next.ayahRange.toAyah, next.ayahRange.ayahCount)
+        : context.l10n.homeLessonSubtitle(lesson?.steps.length ?? 5, minutes);
     return AppCard(
       onTap: onTap,
       color: scheme.primary,
@@ -142,7 +143,7 @@ class _TodayLessonCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Today’s Lesson',
+            context.l10n.homeTodayLesson,
             style: TextStyle(color: scheme.onPrimary, fontSize: 13, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 6),
@@ -165,10 +166,10 @@ class _TodayLessonCard extends StatelessWidget {
                     color: scheme.onPrimary.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Text(
-                    'Start Lesson',
+                  child: Text(
+                    context.l10n.homeStartLesson,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
@@ -186,9 +187,9 @@ class _SkillsOverview extends StatelessWidget {
     final app = Provider.of<AppState>(context);
     final p = app.profile;
     final items = [
-      ('Reading', p.stateOf(SkillType.reading).confidence, SkillColors.reading),
-      ('Tajweed', p.stateOf(SkillType.tajweed).confidence, SkillColors.tajweed),
-      ('Memorization', p.stateOf(SkillType.memorization).confidence, SkillColors.memorization),
+      (context.l10n.homeReading, p.stateOf(SkillType.reading).confidence, SkillColors.reading),
+      (context.l10n.homeTajweed, p.stateOf(SkillType.tajweed).confidence, SkillColors.tajweed),
+      (context.l10n.homeMemorization, p.stateOf(SkillType.memorization).confidence, SkillColors.memorization),
     ];
     return Column(
       children: [
@@ -214,8 +215,8 @@ class _Recommended extends StatelessWidget {
     if (weak.isNotEmpty) {
       items.add(_RecoItem(
         icon: Icons.hearing_rounded,
-        title: 'Practice ${weak.first.label}',
-        subtitle: 'A short focused session will help most.',
+        title: context.l10n.homePracticeSkill(weak.first.label),
+        subtitle: context.l10n.homePracticeSubtitle,
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => const PracticeScreen()),
         ),
@@ -224,8 +225,8 @@ class _Recommended extends StatelessWidget {
     if (review.isNotEmpty) {
       items.add(_RecoItem(
         icon: Icons.refresh_rounded,
-        title: 'Review ${review.first.surahName}',
-        subtitle: 'Due for spaced revision today.',
+        title: context.l10n.homeReviewSurah(review.first.surahName),
+        subtitle: context.l10n.homeReviewSubtitle,
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => QuranReaderScreen(surahNumber: review.first.surahNumber),
@@ -234,10 +235,10 @@ class _Recommended extends StatelessWidget {
       ));
     }
     if (items.isEmpty) {
-      items.add(const _RecoItem(
+      items.add(_RecoItem(
         icon: Icons.auto_stories,
-        title: 'Continue your reading',
-        subtitle: 'Pick up where you left off at a gentle pace.',
+        title: context.l10n.homeContinueReading,
+        subtitle: context.l10n.homeContinueReadingSubtitle,
       ));
     }
     return Column(
@@ -306,10 +307,10 @@ class _JourneyCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          SkillBar(label: 'Journey progress', percent: progress, color: SkillColors.reading),
+          SkillBar(label: context.l10n.homeJourneyProgress, percent: progress, color: SkillColors.reading),
           const SizedBox(height: 6),
           Text(
-            'Moved ${(progress * 100).round()}% of the way through your current surah.',
+            context.l10n.homeJourneyProgressText((progress * 100).round()),
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],

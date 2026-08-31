@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/tutor/ai_tutor_service.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
 /// Optional AI tutor with trusted-education-first answers.
@@ -24,7 +26,8 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
       _messages.add(_ChatEntry(question: text));
       _controller.clear();
     });
-    final response = _tutor.respond(text, context.read<AppState>().profile);
+    final response =
+        _tutor.respond(text, context.read<AppState>().profile, context.l10n);
     final entry = _ChatEntry(
       question: text,
       answer: response.answer,
@@ -35,23 +38,25 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
     });
   }
 
-  static const _suggestions = [
-    'What should I revise today?',
-    'Explain madd',
-    'What is ghunnah?',
-    'Help me understand today’s lesson',
-  ];
+  List<String> _suggestions(AppLocalizations l) => [
+        l.tutorSugRevise,
+        l.tutorSugMadd,
+        l.tutorSugGhunnah,
+        l.tutorSugLesson,
+      ];
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
+    final suggestions = _suggestions(l);
     return Scaffold(
-      appBar: AppBar(title: const Text('AI Tutor')),
+      appBar: AppBar(title: Text(l.tutorTitle)),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: _messages.isEmpty
-                  ? _emptyState()
+                  ? _emptyState(suggestions)
                   : ListView.builder(
                       padding: const EdgeInsets.all(20),
                       itemCount: _messages.length,
@@ -65,7 +70,7 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
                   spacing: 6,
                   runSpacing: 6,
                   children: [
-                    for (final s in _suggestions)
+                    for (final s in suggestions)
                       ActionChip(label: Text(s), onPressed: () => _send(s)),
                   ],
                 ),
@@ -79,8 +84,8 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
                       controller: _controller,
                       textInputAction: TextInputAction.send,
                       onSubmitted: (_) => _send(),
-                      decoration: const InputDecoration(
-                        hintText: 'Ask about Tajweed, vocabulary, revision…',
+                      decoration: InputDecoration(
+                        hintText: l.tutorInputHint,
                       ),
                     ),
                   ),
@@ -98,7 +103,8 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
     );
   }
 
-  Widget _emptyState() {
+  Widget _emptyState(List<String> suggestions) {
+    final l = context.l10n;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -106,12 +112,10 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
         children: [
           Icon(Icons.smart_toy_outlined, size: 72, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 20),
-          Text('A learning companion, not a scholar', style: Theme.of(context).textTheme.titleMedium),
+          Text(l.tutorEmptyTitle, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           Text(
-            'Ask about Tajweed concepts, vocabulary, or what to revise today. '
-            'AyahPath answers from trusted educational material and will point you '
-            'to a qualified teacher for anything that needs scholarly authority.',
+            l.tutorEmptyBody,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
@@ -121,7 +125,7 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
             runSpacing: 8,
             alignment: WrapAlignment.center,
             children: [
-              for (final s in _suggestions)
+              for (final s in suggestions)
                 ActionChip(label: Text(s), onPressed: () => _send(s)),
             ],
           ),

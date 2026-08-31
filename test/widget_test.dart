@@ -3,10 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ayahpath/data/local/local_store.dart';
 import 'package:ayahpath/features/learn/learn_screen.dart';
 import 'package:ayahpath/features/learn/surah_lesson_player_screen.dart';
 import 'package:ayahpath/data/models/surah_lesson.dart';
+import 'package:ayahpath/l10n/app_localizations.dart';
 import 'package:ayahpath/services/app_state.dart';
 import 'package:ayahpath/services/null_auth_service.dart';
 
@@ -42,7 +44,17 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp(home: SurahLessonPlayerScreen(lesson: lesson)),
+      MaterialApp(
+        locale: const Locale('en'),
+        supportedLocales: const [Locale('en'), Locale('ar')],
+        localizationsDelegates: const [
+          ...AppLocalizations.localizationsDelegates,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: SurahLessonPlayerScreen(lesson: lesson),
+      ),
     );
     await tester.pump();
     expect(find.textContaining('Al-Fatihah'), findsWidgets);
@@ -54,7 +66,17 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider.value(
         value: app,
-        child: const MaterialApp(home: LearnScreen()),
+        child: MaterialApp(
+          locale: const Locale('en'),
+          supportedLocales: const [Locale('en'), Locale('ar')],
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const LearnScreen(),
+        ),
       ),
     );
     await tester.pump();

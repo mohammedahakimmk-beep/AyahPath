@@ -1,0 +1,896 @@
+{
+  "@@locale": "en",
+  "appName": "AyahPath",
+  "checkingForUpdates": "Checking for updates...",
+  "preparingJourney": "Preparing your journey...",
+  "updateRequired": "Update Required",
+  "downloadUpdate": "Download Update",
+  "updateRequiredMessage": "An important update is available. Please download and install the latest version to continue using AyahPath.",
+  "skillReading": "Reading",
+  "skillTajweed": "Tajweed",
+  "skillMemorization": "Memorization",
+  "skillRevision": "Revision",
+  "skillComprehension": "Comprehension",
+  "skillFluency": "Fluency",
+  "skillReadingDesc": "Read Arabic and Quranic text fluently",
+  "skillTajweedDesc": "Apply the rules of correct recitation",
+  "skillMemorizationDesc": "Commit ayahs and surahs to memory (Hifz)",
+  "skillRevisionDesc": "Retain and review memorized Qur’an",
+  "skillComprehensionDesc": "Understand vocabulary and meaning",
+  "skillFluencyDesc": "Read with natural pacing and flow",
+  "stepReadingWarmup": "Reading warm-up",
+  "stepTajweedPractice": "Tajweed practice",
+  "stepQuranReading": "Qur’an reading",
+  "stepMemorization": "Memorization",
+  "stepRevision": "Revision",
+  "stepComprehension": "Vocabulary & meaning",
+  "stepAssessment": "Short assessment",
+  "phaseListenRepeat": "Listen & Repeat",
+  "phaseReadAlone": "Read Alone",
+  "phaseAiTest": "AI Recitation Test",
+  "phaseTranslationStudy": "Meaning",
+  "phaseListenRepeatDesc": "Listen carefully and repeat after each ayah",
+  "phaseReadAloneDesc": "Read the ayahs from memory",
+  "phaseAiTestDesc": "Recite without looking — AI analyzes your voice",
+  "phaseTranslationStudyDesc": "Understand the translation and key words",
+  "goalReadQuran": "Learn to read the Qur’an",
+  "goalImproveReading": "Improve reading",
+  "goalTajweed": "Learn Tajweed",
+  "goalMemorize": "Memorize the Qur’an",
+  "goalRevise": "Revise memorized Qur’an",
+  "goalVocabulary": "Understand vocabulary",
+  "goalSelectedSurahs": "Learn selected Surahs",
+  "goalRegularStudy": "Regular Qur’an study",
+  "goalReadQuranSub": "Start from the Arabic letters",
+  "goalImproveReadingSub": "Read more fluently",
+  "goalTajweedSub": "Master the rules of correct recitation",
+  "goalMemorizeSub": "Begin or advance your Hifz",
+  "goalReviseSub": "Strengthen what you already know",
+  "goalVocabularySub": "Learn meanings and key words",
+  "goalSelectedSurahsSub": "Focus on specific surahs",
+  "goalRegularStudySub": "Build a daily habit",
+  "readingBeginner": "I’m a complete beginner",
+  "readingLetters": "I know the letters",
+  "readingWords": "I can read words",
+  "readingFluent": "I can read fluently",
+  "readingBeginnerSub": "I don’t read Arabic yet",
+  "readingLettersSub": "But can’t read connected words yet",
+  "readingWordsSub": "Slowly, with effort",
+  "readingFluentSub": "Quranic text, with or without harakat",
+  "tajweedNone": "I don’t know it",
+  "tajweedBasics": "I know the basics",
+  "tajweedGood": "I’ve studied it",
+  "tajweedStrong": "I’m quite strong",
+  "tajweedBasicsSub": "Letters, madd, etc.",
+  "tajweedGoodSub": "I can apply most rules",
+  "tajweedStrongSub": "Minor gaps only",
+  "memNone": "None yet",
+  "memALittle": "A few surahs",
+  "memSome": "Part of the Qur’an",
+  "memSubstantial": "A substantial amount",
+  "memLots": "Most or all",
+  "memALittleSub": "e.g. the short ones",
+  "memSomeSub": "e.g. some juz",
+  "memSubstantialSub": "A juz or more",
+  "memLotsSub": "Nearly complete Hifz",
+  "freqDaily": "Daily",
+  "freqFewTimesWeek": "3–4 times a week",
+  "freqWeekly": "Weekly",
+  "freqOccasional": "Occasionally",
+  "partLabel": "Part",
+  "learnTitle": "Learn Quran",
+  "@learnStatsSummary": {
+    "placeholders": {
+      "completed": {
+        "type": "String",
+        "description": "Number of completed lessons"
+      },
+      "total": {
+        "type": "String",
+        "description": "Total number of lessons"
+      },
+      "surahsStarted": {
+        "type": "String",
+        "description": "Number of surahs started"
+      }
+    }
+  },
+  "@learnNextLesson": {
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "description": "The title of the next lesson"
+      }
+    }
+  },
+  "@learnLessonDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String",
+        "description": "Starting ayah number"
+      },
+      "to": {
+        "type": "String",
+        "description": "Ending ayah number"
+      },
+      "ayahCount": {
+        "type": "String",
+        "description": "Total ayah count"
+      },
+      "phaseCount": {
+        "type": "String",
+        "description": "Number of phases"
+      }
+    }
+  },
+  "learnFilterAll": "All",
+  "learnFilterShort": "Short (1-7)",
+  "learnFilterMedium": "Medium (8-30)",
+  "learnFilterLong": "Long (30+)",
+  "learnNoResults": "No surahs match this filter.",
+  "@learnAyahCount": {
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "description": "Number of ayahs"
+      }
+    }
+  },
+  "@learnPartsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "description": "Number of lesson parts"
+      }
+    }
+  },
+  "@learnPartsComplete": {
+    "placeholders": {
+      "completed": {
+        "type": "String",
+        "description": "Number of completed parts"
+      },
+      "total": {
+        "type": "String",
+        "description": "Total number of parts"
+      }
+    }
+  },
+  "learnLessonParts": "Lesson Parts",
+  "@learnFullSurah": {
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "description": "Number of ayahs"
+      }
+    }
+  },
+  "@learnPartOf": {
+    "placeholders": {
+      "part": {
+        "type": "String",
+        "description": "Current part number"
+      },
+      "total": {
+        "type": "String",
+        "description": "Total number of parts"
+      },
+      "from": {
+        "type": "String",
+        "description": "Starting ayah number"
+      },
+      "to": {
+        "type": "String",
+        "description": "Ending ayah number"
+      }
+    }
+  },
+  "@learnCompleteScore": {
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "description": "Mastery score as a percentage"
+      }
+    }
+  },
+  "learnComplete": "Complete",
+  "learnStart": "Start",
+  "loginTitle": "AyahPath",
+  "loginSubtitleCreate": "Create your account",
+  "loginSubtitleSignIn": "Sign in to continue",
+  "loginEmail": "Email",
+  "loginPassword": "Password",
+  "loginForgotPassword": "Forgot password?",
+  "loginCreateAccount": "Create account",
+  "loginSignIn": "Sign in",
+  "loginOr": "OR",
+  "loginContinueWithGoogle": "Continue with Google",
+  "loginSwitchToSignIn": "Already have an account? Sign in",
+  "loginSwitchToSignUp": "New here? Create an account",
+  "loginPrivacyNotice": "Your recitation audio is analyzed on-device. Account data (profile & progress) is stored securely online for syncing.",
+  "loginConsentAgree": "I agree to the ",
+  "loginConsentTerms": "Terms of Service",
+  "loginConsentAnd": " and ",
+  "loginConsentPrivacy": "Privacy Policy",
+  "loginConsentRequired": " required to use AyahPath.",
+  "loginErrorAgreeRequired": "Please accept the Terms of Service and Privacy Policy to continue.",
+  "loginErrorGeneric": "Something went wrong. Please check your connection and try again.",
+  "loginErrorGoogleFailed": "Google sign-in failed. Please check your connection and try again.",
+  "loginErrorEnterEmail": "Enter your email address first.",
+  "loginSnackResetSent": "Password reset email sent if that account exists.",
+  "loginSnackResetFailed": "Could not send a reset email. Please try again.",
+  "loginErrorIncorrectCredentials": "Incorrect email or password.",
+  "loginErrorUserDisabled": "This account has been disabled.",
+  "loginErrorEmailInUse": "An account with this email already exists.",
+  "loginErrorInvalidEmail": "Please enter a valid email address.",
+  "loginErrorWeakPassword": "Password must be at least 6 characters.",
+  "loginErrorMethodNotAllowed": "This sign-in method is not enabled.",
+  "loginErrorTooManyRequests": "Too many attempts. Please wait and try again.",
+  "loginErrorAuthFailed": "Authentication failed. Please try again.",
+  "loginValidatorEmail": "Enter a valid email",
+  "loginValidatorPassword": "At least 6 characters",
+  "modelTitle": "Model Manager",
+  "modelOnDeviceModel": "On-device recitation model",
+  "modelOnDeviceBody": "AyahPath uses the Tarteel AI model — a speech model fine-tuned on Quran recitation — bundled inside the app. It runs fully on-device: your voice never leaves the phone, and no download is required.",
+  "modelStorage": "Storage",
+  "modelRecitationModel": "Recitation model",
+  "@modelBundledSize": {
+    "placeholders": {
+      "used": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "modelIncludedSpace": "Included in the app — no extra space is downloaded at runtime.",
+  "modelHowItWorks": "How it works",
+  "modelMicrophone": "Microphone",
+  "modelCapturedLocally": "→ captured locally",
+  "modelTarteelModel": "Tarteel AI model",
+  "modelSpeechToText": "→ speech-to-text on-device",
+  "modelAyahMatcher": "Ayah matcher",
+  "modelCompareRecitation": "→ compare with the recitation",
+  "modelAnalysis": "Analysis",
+  "modelAssistiveFeedback": "→ assistive feedback",
+  "modelCredits": "Credits: The Tarteel AI model is an Apache-2.0 checkpoint distributed by tarteel-ai on Hugging Face, fine-tuned from OpenAI Whisper on Quran recitation. It is run locally by the whisper.cpp engine (MIT).",
+  "modelInstalledTitle": "Tarteel AI — Quran recitation (Q8_0)",
+  "modelBundledReady": "✓ Bundled & ready",
+  "modelFullyOffline": "✓ Fully offline",
+  "modelPrivacyFirst": "✓ Privacy-first (no upload)",
+  "navHome": "Home",
+  "navLearn": "Learn",
+  "navQuran": "Qur'an",
+  "navProgress": "Progress",
+  "navProfile": "Profile",
+  "homePeacefulGuidance": "Peaceful daily guidance",
+  "@homeDayStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeContinueLearning": "Continue your learning",
+  "@homeLessonsCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTodayLesson": "Today's Lesson",
+  "@homeLessonSubtitle": {
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "homeStartLesson": "Start Lesson",
+  "homeYourSkills": "Your skills",
+  "homeRecommendedPractice": "Recommended practice",
+  "homeCurrentJourney": "Current journey",
+  "homeReading": "Reading",
+  "homeTajweed": "Tajweed",
+  "homeMemorization": "Memorization",
+  "@homePracticeSkill": {
+    "placeholders": {
+      "skill": {
+        "type": "String"
+      }
+    }
+  },
+  "homePracticeSubtitle": "A short focused session will help most.",
+  "@homeReviewSurah": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "homeReviewSubtitle": "Due for spaced revision today.",
+  "homeContinueReading": "Continue your reading",
+  "homeContinueReadingSubtitle": "Pick up where you left off at a gentle pace.",
+  "homeJourneyProgress": "Journey progress",
+  "@homeJourneyProgressText": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeAyahRange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "obBack": "Back",
+  "obWelcomeTitle": "Welcome to AyahPath",
+  "obWelcomeDesc": "AyahPath learns how you learn. It will assess where you are, build a personalized plan, listen to your reading on-device, and adapt every lesson to your progress.",
+  "obBeginJourney": "Begin my journey",
+  "obLanguageTitle": "Choose your language",
+  "obLanguageSubtitle": "AyahPath will use this language for the interface.",
+  "obLangEnglish": "English",
+  "obLangEnglishDesc": "Start with English as the interface language",
+  "obLangArabic": "العربية",
+  "obLangArabicDesc": "الواجهة باللغة العربية",
+  "obGoalsTitle": "What do you want to achieve?",
+  "obGoalsSubtitle": "Select all that apply. AyahPath weaves these into your daily plan.",
+  "obContinue": "Continue",
+  "obReadingTitle": "How is your Arabic reading?",
+  "obReadingSubtitle": "This helps us start at the right level.",
+  "obTajweedTitle": "About Tajweed & memorization",
+  "obTajweedSubtitle": "Two quick questions about your background.",
+  "obTajweedQuestion": "How familiar are you with Tajweed?",
+  "obMemQuestion": "How much have you memorized?",
+  "obFrequencyTitle": "How often will you practice?",
+  "obFrequencySubtitle": "We'll size each lesson to fit your rhythm.",
+  "@obFreqMinutes": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "obFreqHabitDesc": "A consistent habit builds steady progress",
+  "obCreatePlan": "Create my personalized plan",
+  "placeTitle": "Placement Assessment",
+  "placeSkip": "Skip",
+  "@placeQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "String",
+        "description": "Current question number (1-based)"
+      },
+      "total": {
+        "type": "String",
+        "description": "Total number of questions"
+      }
+    }
+  },
+  "@placeSurahLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "English name of the surah"
+      },
+      "ayah": {
+        "type": "String",
+        "description": "Ayah number within the surah"
+      }
+    }
+  },
+  "placeSelfConfident": "Confident",
+  "placeSelfNeedsWork": "Needs work",
+  "placeSelfNotYet": "Not yet",
+  "placeSelfHint": "Give your best honest self-assessment. AyahPath adapts from here.",
+  "plReadingLettersPrompt": "Can you recognize these letters:",
+  "plYesRecognize": "Yes, I recognize them",
+  "plSomeRecognize": "Some of them",
+  "plNotYet": "Not yet",
+  "plReadingHarakatPrompt": "Do you read words with harakat comfortably?",
+  "plYesComfortably": "Yes, comfortably",
+  "plWithEffort": "With effort",
+  "plReadingNoTranslitPrompt": "Can you read Quranic text without transliteration?",
+  "plYesFluently": "Yes, fluently",
+  "plMostly": "Mostly",
+  "plTajweedMaddPrompt": "Do you know what madd (elongation) means?",
+  "plYes": "Yes",
+  "plHeardOfIt": "I've heard of it",
+  "plNo": "No",
+  "plTajweedGhunnahPrompt": "Can you identify ghunnah (nasal sound) in your recitation?",
+  "plSomewhat": "Somewhat",
+  "plTajweedRulesPrompt": "Have you studied rules like qalqalah and ikhfa'?",
+  "plYesInDepth": "Yes, in depth",
+  "plBriefly": "Briefly",
+  "plMemShortSurahsPrompt": "How many short surahs can you recite from memory?",
+  "plManyMost": "Many / most",
+  "plAFew": "A few",
+  "plNoneYet": "None yet",
+  "plMemFatihahPrompt": "Can you continue Al-Fatihah from memory to completion?",
+  "plYesFully": "Yes, fully",
+  "plPartly": "Partly",
+  "plCompRabbPrompt": "Do you understand common Quranic words like \"رَبّ\" (Lord)?",
+  "plCompAlhamduPrompt": "Can you explain the meaning of \"Alhamdu lillah\"?",
+  "plRoughly": "Roughly",
+  "planTitle": "Today’s Lesson",
+  "planReadAloud": "Read aloud slowly and clearly. Listen carefully to each word.",
+  "@planTajweedFocus": {
+    "placeholders": {
+      "topic": {
+        "type": "String"
+      }
+    }
+  },
+  "planTajweedInstr": "Practice the selected rule gently. If unsure, tap \"Ask the tutor\" for guidance.",
+  "@planQuickCheck": {
+    "placeholders": {
+      "skill": {
+        "type": "String"
+      }
+    }
+  },
+  "planAssessmentInstr": "Answer a short question to help AyahPath adjust tomorrow’s lesson.",
+  "planWarmupLetters": "Letter warm-up",
+  "planWarmupLettersInstr": "Review the Arabic letters you find most challenging. Say each one slowly.",
+  "planWarmupReading": "Reading warm-up",
+  "planWarmupFluency": "Fluency warm-up",
+  "planWarmupInstr": "Read a short passage from your current surah at a gentle pace, then once a little faster.",
+  "planFocusInstr": "Follow along with the provided exercise. Practice until it feels smooth.",
+  "planFocusReading1": "Letters & sounds",
+  "planFocusReading2": "Reading words with harakat",
+  "planFocusReading3": "Reading Qur’anic phrases",
+  "planFocusTajweed1": "Tajweed foundations",
+  "planFocusTajweed2": "Practicing madd & ghunnah",
+  "planFocusTajweed3": "Advanced tajweed rules",
+  "planFocusMemo1": "Introducing a new ayah",
+  "planFocusMemo2": "Building on today’s ayahs",
+  "planFocusMemo3": "Strengthening your Hifz",
+  "planFocusRevision1": "Refreshing what you know",
+  "planFocusRevision2": "Revision & linking ayahs",
+  "planFocusRevision3": "Deep revision session",
+  "planFocusCompre1": "Key words & meaning",
+  "planFocusCompre2": "Understanding phrases",
+  "planFocusCompre3": "Exploring meaning deeply",
+  "planFocusFluency1": "Focused reading practice",
+  "planFocusFluency2": "Pacing & flow practice",
+  "planFocusFluency3": "Advanced fluency practice",
+  "planMemoStart": "Start memorizing",
+  "planMemoStartInstr": "Hear an ayah, then repeat it 3 times. Try to say it from memory once.",
+  "planMemoReview": "Memorization & revision",
+  "planMemoReviewInstr": "Recite your recent ayahs from memory, then add one new line using spaced repetition.",
+  "planQuranReading": "Qur’an reading",
+  "@planReadingSurah": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "planTajweedTopic1": "basic madd",
+  "planTajweedTopic2": "madd and ghunnah",
+  "planTajweedTopic3": "qalqalah and ikhfa",
+  "planTajweedPrompt1": "Which letter brings a natural elongation (madd)?",
+  "planTajweedPrompt2": "Which rule produces a nasal sound (ghunnah)?",
+  "planTajweedPrompt3": "Which term refers to a voicing bounce (qalqalah)?",
+  "planAssessReadingHi": "How would you rate your smoothness reading today’s ayah?",
+  "planAssessReadingLo": "Could you read today’s words clearly?",
+  "planAssessTajweed": "How well did you apply today’s tajweed rule?",
+  "planAssessMemo": "How much of today’s memorization can you recall?",
+  "planAssessRevision": "How confidently did you revise today?",
+  "planAssessCompre": "Could you explain today’s key words?",
+  "planAssessFluency": "How fluent did today’s reading feel?",
+  "recTitle": "Recitation Practice",
+  "recOnDevice": "On-device",
+  "recCloud": "Cloud",
+  "recSurahLabel": "Surah",
+  "recAyahsLabel": "Ayahs",
+  "recReadyInstruction": "Recite the passage above, then stop when finished.",
+  "recModelNotInstalled": "Voice model not installed — you'll get an assistive preview. Install it in Profile → Model Manager for fuller analysis.",
+  "recStartRecitation": "Start Recitation",
+  "@recListening": {
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Elapsed seconds"
+      }
+    }
+  },
+  "recProcessingLocal": "Processing locally on your device",
+  "recFinishedReciting": "I've finished reciting",
+  "recAnalyzingOnDevice": "Analyzing your recitation on-device…",
+  "recReadingFeedback": "Reading feedback",
+  "@recPausesDetected": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of pauses detected"
+      }
+    }
+  },
+  "recMissedWords": "Words that may have been missed",
+  "recPossibleSubstitutions": "Possible substitutions",
+  "recAiDisclaimer": "AI feedback is assistive. For Tajweed and pronunciation accuracy, please consult a qualified Quran teacher when appropriate.",
+  "recTryAgain": "Try again",
+  "recDone": "Done",
+  "lessonSkip": "Skip",
+  "@lessonAyahCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "description": "Current ayah index"
+      },
+      "total": {
+        "type": "int",
+        "description": "Total ayah count"
+      }
+    }
+  },
+  "lessonTextUnavailable": "Text not available for this ayah.\n\nConnect to a Quran text source to enable this feature.",
+  "lessonShowTranslation": "Show translation",
+  "lessonTranslation": "Translation",
+  "lessonPlaying": "Playing...",
+  "@lessonScorePct": {
+    "placeholders": {
+      "score": {
+        "type": "int",
+        "description": "Score percentage"
+      }
+    }
+  },
+  "lessonExcellent": "Excellent recitation!",
+  "lessonGoodKeepPracticing": "Good, keep practicing",
+  "lessonTryAgainBetter": "Try again — you can do better",
+  "lessonStop": "Stop",
+  "lessonPlay": "Play",
+  "lessonTestMe": "Test Me",
+  "lessonRepeat": "Repeat",
+  "lessonListenRepeatFirst": "Listen carefully to each ayah, then repeat it aloud.\nPractice until it feels natural.",
+  "lessonListenRepeatNext": "Listen and repeat this ayah. Try to match the recitation.",
+  "lessonReadAloneFirst": "Now read the ayahs from memory without hearing them first.\nTake your time — accuracy over speed.",
+  "lessonReadAloneNext": "Read this ayah from memory. Focus on correct pronunciation.",
+  "lessonAiTestFirst": "Recite this ayah without looking at the text.\nAI will analyze your recitation and provide feedback.",
+  "lessonAiTestNext": "Recite from memory. AI analyzes pronunciation and accuracy.",
+  "lessonTranslationStudy": "Read the translation and understand the meaning.\n\nUnderstanding helps memorization.",
+  "lessonMashaAllah": "Masha Allah!",
+  "@lessonPartComplete": {
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "description": "Part number"
+      }
+    }
+  },
+  "lessonRecitationScore": "Recitation Score",
+  "@lessonOfComplete": {
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "description": "Number of completed lessons"
+      },
+      "total": {
+        "type": "int",
+        "description": "Total number of lessons"
+      }
+    }
+  },
+  "lessonReview": "Review",
+  "lessonNextLesson": "Next Lesson",
+  "practiceTitle": "Practice",
+  "practiceQuickAssessment": "Quick assessment",
+  "practiceHifzRevision": "Hifz & revision",
+  "practiceStartRecitation": "Start Recitation",
+  "practiceAnalyzedOnDevice": "Analyzed on-device · private",
+  "practiceCloudAnalysis": "Cloud analysis",
+  "practiceAssessSkill": "Assess a skill",
+  "practiceTough": "Tough",
+  "practiceOkay": "Okay",
+  "practiceGood": "Good",
+  "practiceEasy": "Easy",
+  "@practiceAssessmentRecorded": {
+    "placeholders": {
+      "skill": {
+        "type": "String",
+        "description": "Skill name"
+      },
+      "rating": {
+        "type": "String",
+        "description": "Selected rating label"
+      }
+    }
+  },
+  "practiceNoSurahsDue": "No surahs due for revision right now. Keep your steady rhythm going.",
+  "practiceDueForRevision": "Due for revision",
+  "@practiceDayInterval": {
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "description": "Number of days in the review interval"
+      }
+    }
+  },
+  "practiceReview": "Review",
+  "practiceRevise": "Revise",
+  "@practiceReciteFromMemory": {
+    "placeholders": {
+      "surah": {
+        "type": "String",
+        "description": "Surah name"
+      }
+    }
+  },
+  "practiceNeedsMoreWork": "Needs more work",
+  "practiceRecitedWell": "Recited well",
+  "privTitle": "Privacy",
+  "privPrivacyFirst": "Privacy first",
+  "privIntro": "AyahPath keeps your learning private. Your recitation is analyzed on-device, and your profile and progress are stored securely online so they stay in sync with your account.",
+  "privOnYourDevice": "On your device",
+  "privQuranText": "Qur'an text & reading",
+  "privBundledLocally": "Bundled locally",
+  "privVoiceAnalysis": "Recitation voice analysis",
+  "privOnDeviceModel": "On-device model",
+  "privCloud": "Cloud",
+  "privLoginSession": "Login session",
+  "privLocal": "Local",
+  "privStoredOnline": "Stored securely online (your account)",
+  "privProgress": "Progress, lessons & memorization",
+  "privSyncedToAccount": "Synced to your account",
+  "privLearnerProfile": "Learner profile",
+  "privAiTutorAdvanced": "AI tutor (advanced cloud)",
+  "privOptionalPlanned": "Optional / planned",
+  "privAdditionalContent": "Additional content",
+  "privOnDemand": "On demand",
+  "privYourControl": "Your control",
+  "privControlBody": "AyahPath collects the minimum data needed to work and never sells your information. Your recitation audio is not uploaded. You can review your rights and delete your data at any time.",
+  "privTermsOfService": "Terms of Service",
+  "privPrivacyPolicy": "Privacy Policy",
+  "privDeleteAllData": "Delete all learning data",
+  "privDeleteDialogTitle": "Delete all data?",
+  "privDeleteDialogBody": "This permanently removes your profile, progress, lessons and memorization from your account.",
+  "privCancel": "Cancel",
+  "privDelete": "Delete",
+  "privDeletedSnackbar": "All learning data deleted.",
+  "profTitle": "Profile",
+  "profAiTutor": "AI Tutor",
+  "profAiTutorSubtitle": "Ask about Tajweed, vocabulary or today's lesson",
+  "profModelManager": "Model Manager",
+  "profModelManagerSubtitle": "Download & manage on-device voice models",
+  "profPrivacy": "Privacy",
+  "profPrivacySubtitle": "See how your data is handled",
+  "profSettings": "Settings",
+  "profSettingsSubtitle": "Theme, notifications, language",
+  "profYourJourney": "Your learning journey",
+  "@profOverallProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "profSignedInFallback": "Signed in",
+  "profAccount": "Account",
+  "profSignOut": "Sign out",
+  "progressTitle": "Progress",
+  "progressSkills": "Skills",
+  "progressLearningActivity": "Learning activity",
+  "progressLessons": "Lessons",
+  "progressPractice": "Practice",
+  "progressStreak": "Streak",
+  "progressMemorization": "Memorization",
+  "progressOverallLearning": "Overall learning",
+  "progressOverallSubtitle": "A steady, personal journey — not a competition.",
+  "progressNoMemorized": "No memorized surahs tracked yet. Mark ayahs in the Qur'an reader to begin.",
+  "progressMastered": "Mastered",
+  "progressStillDeveloping": "Still developing — every steady session counts.",
+  "progressDeveloping": "Developing",
+  "quranTitle": "Qur’an",
+  "@quranAyahCount": {
+    "placeholders": {
+      "revelationPlace": {
+        "type": "String",
+        "description": "Revelation place of the surah"
+      },
+      "count": {
+        "type": "int",
+        "description": "Number of ayahs in the surah"
+      }
+    }
+  },
+  "quranTrustedTextTitle": "Trusted text",
+  "quranTrustedTextBody": "Quranic text follows the standard Hafs orthography (Tanzil). It is never modified or generated. More surahs can be added to this verified dataset offline.",
+  "@quranContinueReading": {
+    "placeholders": {
+      "surahName": {
+        "type": "String",
+        "description": "Name of the surah to continue"
+      }
+    }
+  },
+  "readerNote": "Note",
+  "readerNoteHint": "Reflection, reference or reminder…",
+  "readerCancel": "Cancel",
+  "readerSave": "Save",
+  "readerRecitationPractice": "Recitation practice",
+  "readerTranslation": "Translation",
+  "readerTransliteration": "Transliteration",
+  "@readerAyahCount": {
+    "placeholders": {
+      "revelationPlace": {
+        "type": "String",
+        "description": "Revelation place of the surah"
+      },
+      "count": {
+        "type": "int",
+        "description": "Number of ayahs in the surah"
+      }
+    }
+  },
+  "readerBookmark": "Bookmark",
+  "readerAddNote": "Add note",
+  "readerMemorized": "Memorized",
+  "readerMarkMemorized": "Mark as memorized",
+  "@readerMarkedMemorized": {
+    "placeholders": {
+      "ayahNumber": {
+        "type": "int",
+        "description": "The ayah number that was marked"
+      }
+    }
+  },
+  "setTitle": "Settings",
+  "setAppearance": "Appearance",
+  "setLight": "Light",
+  "setSystem": "System",
+  "setDark": "Dark",
+  "setNotifications": "Notifications",
+  "setNotificationsSubtitle": "Gentle reminders like \"Your Qur'an lesson is ready.\" You can turn these off completely.",
+  "setInterfaceLanguage": "Interface language",
+  "setInterfaceLanguageSubtitle": "English (العربية coming soon)",
+  "setSyncInfo": "AyahPath syncs your learning data to your account so it stays in sync across reinstalls. Your recitation audio is analyzed on-device and is never uploaded. You can review and delete your data at any time from the Privacy screen.",
+  "setVersion": "AyahPath v1.1.0 · Online-first",
+  "tutorTitle": "AI Tutor",
+  "tutorInputHint": "Ask about Tajweed, vocabulary, revision…",
+  "tutorEmptyTitle": "A learning companion, not a scholar",
+  "tutorEmptyBody": "Ask about Tajweed concepts, vocabulary, or what to revise today. AyahPath answers from trusted educational material and will point you to a qualified teacher for anything that needs scholarly authority.",
+  "tutorSugRevise": "What should I revise today?",
+  "tutorSugMadd": "Explain madd",
+  "tutorSugGhunnah": "What is ghunnah?",
+  "tutorSugLesson": "Help me understand today’s lesson",
+  "tutorMadd": "Madd (مد) means to lengthen a vowel. The letters that extend are ا ، و ، ي when they follow a fitting harakat. In its \"natural\" form (madd tabiʿi) a madd letter is held for roughly two counts. Practicing slowly with a teacher or audio helps build steady control.",
+  "tutorGhunnah": "Ghunnah (غنة) is the nasal resonance produced through the nose, lasting about two counts. It is heard in the letters ن and م when they carry shaddah (e.g. إِنَّ). Holding the nose gently while practicing can help you feel and hear it.",
+  "tutorQalqalah": "Qalqalah (قلقلة) is a slight, crisp bounce heard when pronouncing the letters ق ط ب ج د when they carry a sukun. It gives these letters their distinct clarity.",
+  "tutorIkhfa": "Ikhfa (إخفاء) means to conceal. When the letter ن with sukun (or tanween) precedes certain letters, it is pronounced with partial nasalization (ghunnah) without a full clear ن. It is one of the main rules (ahkam) of noon and tanween.",
+  "tutorTajweed": "Tajweed (تجويد) is the set of rules for correct, beautiful recitation of the Qur’an: proper letter articulation (makharij), qualities (sifaat), and the rules of noon, meem, and madd. It is best learned gradually and with a qualified teacher who can hear and correct your recitation.",
+  "tutorVocabulary": "Growing Quranic vocabulary is best learned in context. As you read an ayah, note recurring words and roots — words like \"رَبّ\" (Lord) and \"نَاس\" (people) reappear often. Use the Reader’s translation and meaning notes to build understanding gradually.",
+  "tutorTest": "I can give you a short practice prompt. Read today’s focus surah aloud, then explain the meaning of two key words, and recall one ayah from memory. Your practice screen already offers structured checks to rebuild after each lesson.",
+  "tutorSurah": "Which surah would you like to focus on? I can help you plan reading, memorization or revision for it. Trusted surah text and context are available in the Reader.",
+  "tutorRuling": "That question involves religious ruling, which requires scholarly authority. AyahPath is a learning companion and does not issue religious rulings. Please consult a qualified scholar or a trusted Islamic reference for authoritative guidance.",
+  "tutorAnd": " and ",
+  "@tutorWeakSkills": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "tutorGeneric": "I can help with Tajweed concepts, vocabulary, revision planning, and your daily lesson. Ask something like \"What should I revise today?\" or \"Explain madd.\" For rulings that need scholarly authority, I’ll point you to a qualified teacher.",
+  "@tutorRevisionDueAndWeak": {
+    "placeholders": {
+      "dueNames": {
+        "type": "String"
+      },
+      "weakNames": {
+        "type": "String"
+      }
+    }
+  },
+  "@tutorRevisionDue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "dueNames": {
+        "type": "String"
+      }
+    }
+  },
+  "@tutorRevisionWeak": {
+    "placeholders": {
+      "weakNames": {
+        "type": "String"
+      }
+    }
+  },
+  "tutorRevisionGood": "You’re in good shape across your skills. Today is a good day to slightly extend your reading and add one small memorization step.",
+  "learnStatsSummary": "{completed}/{total} lessons complete • {surahsStarted} surahs started",
+  "learnNextLesson": "Next: {title}",
+  "learnLessonDetail": "Ayahs {from}-{to} • {ayahCount} ayahs • {phaseCount} phases",
+  "learnAyahCount": "{count} ayahs",
+  "learnPartsCount": "{count} parts",
+  "learnPartsComplete": "{completed}/{total} parts complete",
+  "learnFullSurah": "Full Surah ({count} ayahs)",
+  "learnPartOf": "Part {part} of {total} (Ayahs {from}-{to})",
+  "learnCompleteScore": "Complete • Score: {score}%",
+  "modelBundledSize": "{used} of ~{total} MB bundled",
+  "homeDayStreak": "{count} day streak",
+  "homeLessonsCompleted": "{count} lessons completed",
+  "homeLessonSubtitle": "{steps} steps · {minutes} minutes",
+  "homePracticeSkill": "Practice {skill}",
+  "homeReviewSurah": "Review {surah}",
+  "homeJourneyProgressText": "Moved {percent}% of the way through your current surah.",
+  "homeAyahRange": "Ayahs {from}-{to} • {count} ayahs",
+  "obFreqMinutes": "{label} · ~{minutes} min",
+  "placeQuestionCounter": "{current} of {total}",
+  "placeSurahLabel": "Surah {name}:{ayah}",
+  "planTajweedFocus": "Tajweed focus: {topic}",
+  "planQuickCheck": "Quick check: {skill}",
+  "planReadingSurah": "Reading {surah}",
+  "recListening": "Listening… {seconds}s",
+  "recPausesDetected": "Pauses detected: {count}",
+  "lessonAyahCounter": "Ayah {current} of {total}",
+  "lessonScorePct": "Recitation: {score}%",
+  "lessonPartComplete": "Part {number} Complete!",
+  "lessonOfComplete": "{completed} of {total} lessons complete",
+  "practiceAssessmentRecorded": "{skill}: {rating} recorded",
+  "practiceDayInterval": "{days} day interval",
+  "practiceReciteFromMemory": "Recite {surah} from memory, then mark how it went.",
+  "profOverallProgress": "{percent}% overall · {streak}-day streak",
+  "quranAyahCount": "{revelationPlace} · {count} ayahs",
+  "quranContinueReading": "Continue reading {surahName}",
+  "readerAyahCount": "{revelationPlace} · {count} ayahs",
+  "readerMarkedMemorized": "Marked ayah {ayahNumber} as memorized",
+  "tutorWeakSkills": "Based on your recent progress, {names} could use gentle, consistent practice. Your daily lesson already adjusts to include it — keep short, regular sessions rather than long irregular ones.",
+  "tutorRevisionDueAndWeak": "Today priorities: revise {dueNames} (it’s due for spaced review), and give {weakNames} a focused 5-minute session. Your lesson already builds these in.",
+  "tutorRevisionDue": "Your spaced-revision schedule has {count} section(s) due: {dueNames}. Reviewing these now will strengthen long-term memory.",
+  "tutorRevisionWeak": "Recommend focusing on {weakNames} today — a short targeted practice will help most. Your daily lesson is adapted to include it.",
+  "obTagline": "Your Personalized Path to Learning the Quran",
+  "@obTagline": {
+    "description": "Tagline on the onboarding welcome screen"
+  },
+  "progressMinutesShort": "{min} min",
+  "@progressMinutesShort": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHoursMinutes": "{h}h {m}m",
+  "@progressHoursMinutes": {
+    "placeholders": {
+      "h": {
+        "type": "int"
+      },
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "updateVersionLabel": "Version {version}",
+  "@updateVersionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  }
+}

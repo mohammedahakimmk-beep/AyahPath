@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_widgets.dart';
 import '../../data/models/learner_profile.dart';
 import '../../data/models/skill_type.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
 /// Detailed but understandable progress overview.
@@ -16,14 +17,14 @@ class ProgressScreen extends StatelessWidget {
     final app = Provider.of<AppState>(context);
     final p = app.profile;
     return Scaffold(
-      appBar: AppBar(title: const Text('Progress')),
+      appBar: AppBar(title: Text(context.l10n.progressTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: [
             _overallCard(context, p.overallProgress),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'Skills'),
+            SectionHeader(title: context.l10n.progressSkills),
             const SizedBox(height: 12),
             AppCard(
               child: Column(
@@ -42,21 +43,21 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'Learning activity'),
+            SectionHeader(title: context.l10n.progressLearningActivity),
             const SizedBox(height: 12),
             AppCard(
               child: Row(
                 children: [
-                  _stat(context, '${p.lessonsCompleted}', 'Lessons'),
+                  _stat(context, '${p.lessonsCompleted}', context.l10n.progressLessons),
                   _divider(context),
-                  _stat(context, _minutes(p.totalPracticeMinutes), 'Practice'),
+                  _stat(context, _minutes(p.totalPracticeMinutes, context), context.l10n.progressPractice),
                   _divider(context),
-                  _stat(context, '${p.currentStreak}', 'Streak'),
+                  _stat(context, '${p.currentStreak}', context.l10n.progressStreak),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            const SectionHeader(title: 'Memorization'),
+            SectionHeader(title: context.l10n.progressMemorization),
             const SizedBox(height: 12),
             _memorizationCard(context, p),
             const SizedBox(height: 20),
@@ -81,7 +82,7 @@ class ProgressScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Overall learning',
+                  context.l10n.progressOverallLearning,
                   style: TextStyle(color: scheme.onPrimary, fontSize: 13, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 4),
@@ -90,7 +91,7 @@ class ProgressScreen extends StatelessWidget {
                   style: TextStyle(color: scheme.onPrimary, fontSize: 34, fontWeight: FontWeight.w800),
                 ),
                 Text(
-                  'A steady, personal journey — not a competition.',
+                  context.l10n.progressOverallSubtitle,
                   style: TextStyle(color: scheme.onPrimary.withValues(alpha: 0.8), fontSize: 12),
                 ),
               ],
@@ -143,8 +144,8 @@ class ProgressScreen extends StatelessWidget {
   Widget _memorizationCard(BuildContext context, LearnerProfile p) {
     final entries = p.memorization.values.toList();
     if (entries.isEmpty) {
-      return const AppCard(
-        child: Text('No memorized surahs tracked yet. Mark ayahs in the Qur’an reader to begin.'),
+      return AppCard(
+        child: Text(context.l10n.progressNoMemorized),
       );
     }
     return AppCard(
@@ -172,19 +173,19 @@ class ProgressScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Mastered', style: Theme.of(context).textTheme.titleMedium),
+          Text(context.l10n.progressMastered, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           Text(
             mastered.isEmpty
-                ? 'Still developing — every steady session counts.'
+                ? context.l10n.progressStillDeveloping
                 : mastered.map((s) => s.label).join(', '),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 14),
-          Text('Developing', style: Theme.of(context).textTheme.titleMedium),
+          Text(context.l10n.progressDeveloping, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           Text(
-            developing.map((s) => s.label).join(', '),
+            developing.map((s) => s.localizedLabel(context.l10n)).join(', '),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
@@ -192,11 +193,11 @@ class ProgressScreen extends StatelessWidget {
     );
   }
 
-  String _minutes(int min) {
-    if (min < 60) return '$min min';
+  String _minutes(int min, BuildContext context) {
+    if (min < 60) return context.l10n.progressMinutesShort(min);
     final h = min ~/ 60;
     final m = min % 60;
-    return '${h}h ${m}m';
+    return context.l10n.progressHoursMinutes(h, m);
   }
 
   Color _colorFor(SkillType s) {

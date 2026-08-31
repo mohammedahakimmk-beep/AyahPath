@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/surah_lesson.dart';
 import '../../data/quran/quran_data.dart';
 import '../../data/quran/quran_models.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
 /// The main lesson player screen implementing the 3-phase flow:
@@ -161,7 +162,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
         actions: [
           TextButton(
             onPressed: _skipPhase,
-            child: const Text('Skip'),
+            child: Text(context.l10n.lessonSkip),
           ),
         ],
       ),
@@ -188,12 +189,12 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
               Icon(_phaseIcon(currentPhase), size: 18, color: scheme.primary),
               const SizedBox(width: 8),
               Text(
-                currentPhase.label,
+                currentPhase.localizedLabel(context.l10n),
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
               ),
               const Spacer(),
               Text(
-                currentPhase.description,
+                currentPhase.localizedDescription(context.l10n),
                 style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
               ),
             ],
@@ -231,7 +232,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Ayah $_currentAyahIndex of ${range.ayahCount}',
+            context.l10n.lessonAyahCounter(_currentAyahIndex, range.ayahCount),
             style: TextStyle(fontWeight: FontWeight.w500, color: scheme.onSurfaceVariant),
           ),
         ],
@@ -245,7 +246,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
     if (ayah == null) {
       return Center(
         child: Text(
-          'Text not available for this ayah.\n\nConnect to a Quran text source to enable this feature.',
+          context.l10n.lessonTextUnavailable,
           textAlign: TextAlign.center,
           style: TextStyle(color: scheme.onSurfaceVariant),
         ),
@@ -265,7 +266,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
           else
             TextButton(
               onPressed: () => setState(() => _showTranslation = true),
-              child: const Text('Show translation'),
+              child: Text(context.l10n.lessonShowTranslation),
             ),
           const SizedBox(height: 16),
           if (currentPhase == LessonPhase.listenRepeat && _isPlaying)
@@ -284,21 +285,21 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
     switch (currentPhase) {
       case LessonPhase.listenRepeat:
         instruction = _isFirstAyah
-            ? 'Listen carefully to each ayah, then repeat it aloud.\nPractice until it feels natural.'
-            : 'Listen and repeat this ayah. Try to match the recitation.';
+            ? context.l10n.lessonListenRepeatFirst
+            : context.l10n.lessonListenRepeatNext;
         icon = Icons.headphones;
       case LessonPhase.readAlone:
         instruction = _isFirstAyah
-            ? 'Now read the ayahs from memory without hearing them first.\nTake your time — accuracy over speed.'
-            : 'Read this ayah from memory. Focus on correct pronunciation.';
+            ? context.l10n.lessonReadAloneFirst
+            : context.l10n.lessonReadAloneNext;
         icon = Icons.menu_book;
       case LessonPhase.aiTest:
         instruction = _isFirstAyah
-            ? 'Recite this ayah without looking at the text.\nAI will analyze your recitation and provide feedback.'
-            : 'Recite from memory. AI analyzes pronunciation and accuracy.';
+            ? context.l10n.lessonAiTestFirst
+            : context.l10n.lessonAiTestNext;
         icon = Icons.mic;
       case LessonPhase.translationStudy:
-        instruction = 'Read the translation and understand the meaning.\n\nUnderstanding helps memorization.';
+        instruction = context.l10n.lessonTranslationStudy;
         icon = Icons.translate;
     }
 
@@ -362,7 +363,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Translation',
+            context.l10n.lessonTranslation,
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: 6),
@@ -391,7 +392,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
             child: CircularProgressIndicator(strokeWidth: 2, color: scheme.primary),
           ),
           const SizedBox(width: 8),
-          Text('Playing...', style: TextStyle(color: scheme.primary, fontSize: 13)),
+          Text(context.l10n.lessonPlaying, style: TextStyle(color: scheme.primary, fontSize: 13)),
         ],
       ),
     );
@@ -443,13 +444,13 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Recitation: $scorePercent%', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                Text(context.l10n.lessonScorePct(scorePercent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                 Text(
                   isGood
-                      ? 'Excellent recitation!'
+                      ? context.l10n.lessonExcellent
                       : isOk
-                          ? 'Good, keep practicing'
-                          : 'Try again — you can do better',
+                          ? context.l10n.lessonGoodKeepPracticing
+                          : context.l10n.lessonTryAgainBetter,
                   style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
               ],
@@ -481,14 +482,14 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
             if (currentPhase == LessonPhase.listenRepeat || currentPhase == LessonPhase.readAlone)
               _buildActionButton(
                 icon: _isPlaying ? Icons.stop : Icons.play_arrow,
-                label: _isPlaying ? 'Stop' : 'Play',
+                label: _isPlaying ? context.l10n.lessonStop : context.l10n.lessonPlay,
                 onPressed: ayah != null ? _playAyah : null,
                 scheme: scheme,
               ),
             if (_isListening)
               _buildActionButton(
                 icon: Icons.stop,
-                label: 'Stop',
+                label: context.l10n.lessonStop,
                 onPressed: () {
                   _pulseController.stop();
                   setState(() => _isListening = false);
@@ -499,7 +500,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
             else
               _buildActionButton(
                 icon: currentPhase == LessonPhase.aiTest ? Icons.mic : Icons.mic_none,
-                label: currentPhase == LessonPhase.aiTest ? 'Test Me' : 'Repeat',
+                label: currentPhase == LessonPhase.aiTest ? context.l10n.lessonTestMe : context.l10n.lessonRepeat,
                 onPressed: ayah != null ? _startListening : null,
                 isPrimary: false,
                 scheme: scheme,
@@ -564,8 +565,8 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
                 const SizedBox(height: 24),
                 Text(
                   widget.lesson.isSinglePart
-                      ? 'Masha Allah!'
-                      : 'Part ${widget.lesson.partNumber} Complete!',
+                      ? context.l10n.lessonMashaAllah
+                      : context.l10n.lessonPartComplete(widget.lesson.partNumber),
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
@@ -583,7 +584,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
                   ),
                   child: Column(
                     children: [
-                      Text('Recitation Score', style: TextStyle(color: scheme.onSurfaceVariant)),
+                      Text(context.l10n.lessonRecitationScore, style: TextStyle(color: scheme.onSurfaceVariant)),
                       const SizedBox(height: 8),
                       Text(
                         '$scorePercent%',
@@ -602,7 +603,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '${stats.completedLessons} of ${stats.totalLessons} lessons complete',
+                  context.l10n.lessonOfComplete(stats.completedLessons, stats.totalLessons),
                   style: TextStyle(color: scheme.onSurfaceVariant),
                 ),
                 const SizedBox(height: 32),
@@ -611,7 +612,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('Review'),
+                        child: Text(context.l10n.lessonReview),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -628,7 +629,7 @@ class _SurahLessonPlayerScreenState extends State<SurahLessonPlayerScreen>
                             Navigator.pop(context);
                           }
                         },
-                        child: const Text('Next Lesson'),
+                        child: Text(context.l10n.lessonNextLesson),
                       ),
                     ),
                   ],

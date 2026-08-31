@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
 /// App settings: theme, notifications, language path.
@@ -11,8 +12,9 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
+    final l = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l.setTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
@@ -25,15 +27,15 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       const Icon(Icons.palette_outlined),
                       const SizedBox(width: 12),
-                      Text('Appearance', style: Theme.of(context).textTheme.titleMedium),
+                      Text(l.setAppearance, style: Theme.of(context).textTheme.titleMedium),
                     ],
                   ),
                   const SizedBox(height: 12),
                   SegmentedButton<ThemeMode>(
-                    segments: const [
-                      ButtonSegment(value: ThemeMode.light, label: Text('Light'), icon: Icon(Icons.light_mode)),
-                      ButtonSegment(value: ThemeMode.system, label: Text('System'), icon: Icon(Icons.brightness_auto)),
-                      ButtonSegment(value: ThemeMode.dark, label: Text('Dark'), icon: Icon(Icons.dark_mode)),
+                    segments: [
+                      ButtonSegment(value: ThemeMode.light, label: Text(l.setLight), icon: const Icon(Icons.light_mode)),
+                      ButtonSegment(value: ThemeMode.system, label: Text(l.setSystem), icon: const Icon(Icons.brightness_auto)),
+                      ButtonSegment(value: ThemeMode.dark, label: Text(l.setDark), icon: const Icon(Icons.dark_mode)),
                     ],
                     selected: {app.themeMode},
                     onSelectionChanged: (s) => app.setThemeMode(s.first),
@@ -48,11 +50,8 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Notifications'),
-                    subtitle: const Text(
-                      'Gentle reminders like "Your Qur’an lesson is ready." '
-                      'You can turn these off completely.',
-                    ),
+                    title: Text(l.setNotifications),
+                    subtitle: Text(l.setNotificationsSubtitle),
                     value: app.notificationsEnabled,
                     onChanged: app.setNotificationsEnabled,
                   ),
@@ -64,8 +63,8 @@ class SettingsScreen extends StatelessWidget {
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.translate),
-                title: const Text('Interface language'),
-                subtitle: const Text('English (العربية coming soon)'),
+                title: Text(l.setInterfaceLanguage),
+                subtitle: Text(l.setInterfaceLanguageSubtitle),
                 trailing: const Icon(Icons.chevron_right),
               ),
             ),
@@ -77,10 +76,7 @@ class SettingsScreen extends StatelessWidget {
                   const Icon(Icons.info_outline),
                   const SizedBox(height: 8),
                   Text(
-                    'AyahPath syncs your learning data to your account so it stays '
-                    'in sync across reinstalls. Your recitation audio is analyzed '
-                    'on-device and is never uploaded. You can review and delete '
-                    'your data at any time from the Privacy screen.',
+                    l.setSyncInfo,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -88,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'AyahPath v1.1.0 · Online-first',
+              l.setVersion,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall,
             ),

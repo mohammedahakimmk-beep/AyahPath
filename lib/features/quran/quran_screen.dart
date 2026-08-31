@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
 import '../../data/quran/quran_data.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 import 'quran_reader_screen.dart';
 
@@ -14,7 +15,7 @@ class QuranTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = Provider.of<AppState>(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Qur’an')),
+      appBar: AppBar(title: Text(context.l10n.quranTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
@@ -44,7 +45,7 @@ class QuranTab extends StatelessWidget {
                           children: [
                             Text(s.englishName, style: Theme.of(context).textTheme.titleMedium),
                             Text(
-                              '${s.revelationPlace} · ${s.ayahCount} ayahs',
+                              context.l10n.quranAyahCount(s.revelationPlace, s.ayahCount),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -74,14 +75,12 @@ class QuranTab extends StatelessWidget {
                     children: [
                       const Icon(Icons.verified_rounded, size: 18),
                       const SizedBox(width: 8),
-                      Text('Trusted text', style: Theme.of(context).textTheme.titleMedium),
+                      Text(context.l10n.quranTrustedTextTitle, style: Theme.of(context).textTheme.titleMedium),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Quranic text follows the standard Hafs orthography (Tanzil). '
-                    'It is never modified or generated. More surahs can be added to this '
-                    'verified dataset offline.',
+                    context.l10n.quranTrustedTextBody,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -131,7 +130,7 @@ class _ContinueCard extends StatelessWidget {
           const SizedBox(width: 14),
           Expanded(
             child: Text(
-              'Continue reading ${s.englishName}',
+              context.l10n.quranContinueReading(s.englishName),
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
             ),
           ),

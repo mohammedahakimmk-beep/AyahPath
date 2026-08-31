@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../l10n/ext.dart';
 import '../../data/models/surah_lesson.dart';
 import '../../data/quran/quran_metadata.dart';
 import '../../domain/adaptive/surah_lesson_generator.dart';
@@ -57,10 +58,14 @@ class _LearnScreenState extends State<LearnScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Learn Quran', style: Theme.of(context).textTheme.headlineMedium),
+          Text(context.l10n.learnTitle, style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 4),
           Text(
-            '${stats.completedLessons}/${stats.totalLessons} lessons complete • ${stats.surahsStarted} surahs started',
+            context.l10n.learnStatsSummary(
+              stats.completedLessons.toString(),
+              stats.totalLessons.toString(),
+              stats.surahsStarted.toString(),
+            ),
             style: TextStyle(
               fontSize: 13,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -115,13 +120,17 @@ class _LearnScreenState extends State<LearnScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Next: ${next.displayTitle}',
+                        context.l10n.learnNextLesson(next.displayTitle),
                         style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Ayahs ${next.ayahRange.fromAyah}-${next.ayahRange.toAyah} • '
-                        '${next.ayahRange.ayahCount} ayahs • ${next.phases.length} phases',
+                        context.l10n.learnLessonDetail(
+                          next.ayahRange.fromAyah.toString(),
+                          next.ayahRange.toAyah.toString(),
+                          next.ayahRange.ayahCount.toString(),
+                          next.phases.length.toString(),
+                        ),
                         style: TextStyle(
                           fontSize: 12,
                           color: scheme.onSurfaceVariant,
@@ -145,13 +154,13 @@ class _LearnScreenState extends State<LearnScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Row(
         children: [
-          _filterChip('All', 'all'),
+          _filterChip(context.l10n.learnFilterAll, 'all'),
           const SizedBox(width: 8),
-          _filterChip('Short (1-7)', 'short'),
+          _filterChip(context.l10n.learnFilterShort, 'short'),
           const SizedBox(width: 8),
-          _filterChip('Medium (8-30)', 'medium'),
+          _filterChip(context.l10n.learnFilterMedium, 'medium'),
           const SizedBox(width: 8),
-          _filterChip('Long (30+)', 'long'),
+          _filterChip(context.l10n.learnFilterLong, 'long'),
         ],
       ),
     );
@@ -181,7 +190,7 @@ class _LearnScreenState extends State<LearnScreen> {
     if (surahs.isEmpty) {
       return Center(
         child: Text(
-          'No surahs match this filter.',
+          context.l10n.learnNoResults,
           style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
       );
@@ -268,12 +277,12 @@ class _LearnScreenState extends State<LearnScreen> {
                     Row(
                       children: [
                         Text(
-                          '${surah.ayahCount} ayahs',
+                          context.l10n.learnAyahCount(surah.ayahCount.toString()),
                           style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
                         ),
                         if (totalParts > 1)
                           Text(
-                            ' • $totalParts parts',
+                            ' • ${context.l10n.learnPartsCount(totalParts.toString())}',
                             style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
                           ),
                         if (surah.revelationPlace.isNotEmpty)
@@ -294,7 +303,10 @@ class _LearnScreenState extends State<LearnScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '$completedParts/$totalParts parts complete',
+                        context.l10n.learnPartsComplete(
+                          completedParts.toString(),
+                          totalParts.toString(),
+                        ),
                         style: TextStyle(fontSize: 11, color: scheme.primary),
                       ),
                     ],
@@ -352,7 +364,7 @@ class _LearnScreenState extends State<LearnScreen> {
                             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '${surah.name} • ${surah.ayahCount} ayahs • ${surah.revelationPlace}',
+                            '${surah.name} • ${context.l10n.learnAyahCount(surah.ayahCount.toString())} • ${surah.revelationPlace}',
                             style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                           ),
                         ],
@@ -371,7 +383,7 @@ class _LearnScreenState extends State<LearnScreen> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Lesson Parts',
+                  context.l10n.learnLessonParts,
                   style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 const SizedBox(height: 8),
@@ -417,15 +429,20 @@ class _LearnScreenState extends State<LearnScreen> {
         ),
         title: Text(
           lesson.isSinglePart
-              ? 'Full Surah (${lesson.ayahRange.ayahCount} ayahs)'
-              : 'Part ${lesson.partNumber} of ${lesson.totalParts} (Ayahs ${lesson.ayahRange.fromAyah}-${lesson.ayahRange.toAyah})',
+              ? context.l10n.learnFullSurah(lesson.ayahRange.ayahCount.toString())
+              : context.l10n.learnPartOf(
+                  lesson.partNumber.toString(),
+                  lesson.totalParts.toString(),
+                  lesson.ayahRange.fromAyah.toString(),
+                  lesson.ayahRange.toAyah.toString(),
+                ),
           style: const TextStyle(fontSize: 14),
         ),
         subtitle: Text(
           isCompleted && mastery != null
-              ? 'Complete • Score: ${(mastery * 100).round()}%'
+              ? context.l10n.learnCompleteScore((mastery * 100).round().toString())
               : isCompleted
-                  ? 'Complete'
+                  ? context.l10n.learnComplete
                   : lesson.phases.map((p) => p.label).join(' → '),
           style: TextStyle(
             fontSize: 12,
@@ -445,7 +462,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text('Start', style: TextStyle(fontSize: 12)),
+                child: Text(context.l10n.learnStart, style: const TextStyle(fontSize: 12)),
               ),
       ),
     );

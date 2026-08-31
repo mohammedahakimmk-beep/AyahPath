@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/widgets/app_widgets.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 import 'ai_tutor_screen.dart';
 import 'model_manager_screen.dart';
@@ -14,18 +15,19 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(title: Text(l.profTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: [
             const _ProfileCard(),
             const SizedBox(height: 20),
-            _navTile(context, Icons.smart_toy_outlined, 'AI Tutor', 'Ask about Tajweed, vocabulary or today’s lesson', () => push(context, const AiTutorScreen())),
-            _navTile(context, Icons.memory_outlined, 'Model Manager', 'Download & manage on-device voice models', () => push(context, const ModelManagerScreen())),
-            _navTile(context, Icons.shield_outlined, 'Privacy', 'See how your data is handled', () => push(context, const PrivacyScreen())),
-            _navTile(context, Icons.settings_outlined, 'Settings', 'Theme, notifications, language', () => push(context, const SettingsScreen())),
+            _navTile(context, Icons.smart_toy_outlined, l.profAiTutor, l.profAiTutorSubtitle, () => push(context, const AiTutorScreen())),
+            _navTile(context, Icons.memory_outlined, l.profModelManager, l.profModelManagerSubtitle, () => push(context, const ModelManagerScreen())),
+            _navTile(context, Icons.shield_outlined, l.profPrivacy, l.profPrivacySubtitle, () => push(context, const PrivacyScreen())),
+            _navTile(context, Icons.settings_outlined, l.profSettings, l.profSettingsSubtitle, () => push(context, const SettingsScreen())),
             const SizedBox(height: 20),
             const _AccountCard(),
           ],
@@ -82,6 +84,7 @@ class _ProfileCard extends StatelessWidget {
     final app = Provider.of<AppState>(context);
     final p = app.profile;
     final goals = p.onboarding?.goals ?? const [];
+    final l = context.l10n;
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,9 +109,9 @@ class _ProfileCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Your learning journey', style: Theme.of(context).textTheme.titleMedium),
+                    Text(l.profYourJourney, style: Theme.of(context).textTheme.titleMedium),
                     Text(
-                      '${(p.overallProgress * 100).round()}% overall · ${p.currentStreak}-day streak',
+                      l.profOverallProgress((p.overallProgress * 100).round(), p.currentStreak),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -137,7 +140,8 @@ class _AccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final email = app.authUser?.email ?? 'Signed in';
+    final l = context.l10n;
+    final email = app.authUser?.email ?? l.profSignedInFallback;
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +154,7 @@ class _AccountCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Account', style: Theme.of(context).textTheme.titleMedium),
+                    Text(l.profAccount, style: Theme.of(context).textTheme.titleMedium),
                     Text(
                       email,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -166,7 +170,7 @@ class _AccountCard extends StatelessWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.logout),
-              label: const Text('Sign out'),
+              label: Text(l.profSignOut),
               onPressed: () async {
                 await app.signOut();
               },

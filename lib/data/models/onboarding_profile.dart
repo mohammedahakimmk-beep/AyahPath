@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import '../../l10n/app_localizations.dart';
+
 /// Learning goals a learner can select during onboarding.
 enum LearningGoal {
   readQuran('Learn to read the Qur’an', 'Start from the Arabic letters'),
@@ -15,6 +17,48 @@ enum LearningGoal {
 
   final String label;
   final String subtitle;
+
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case LearningGoal.readQuran:
+        return l.goalReadQuran;
+      case LearningGoal.improveReading:
+        return l.goalImproveReading;
+      case LearningGoal.tajweed:
+        return l.goalTajweed;
+      case LearningGoal.memorize:
+        return l.goalMemorize;
+      case LearningGoal.revise:
+        return l.goalRevise;
+      case LearningGoal.vocabulary:
+        return l.goalVocabulary;
+      case LearningGoal.selectedSurahs:
+        return l.goalSelectedSurahs;
+      case LearningGoal.regularStudy:
+        return l.goalRegularStudy;
+    }
+  }
+
+  String localizedSubtitle(AppLocalizations l) {
+    switch (this) {
+      case LearningGoal.readQuran:
+        return l.goalReadQuranSub;
+      case LearningGoal.improveReading:
+        return l.goalImproveReadingSub;
+      case LearningGoal.tajweed:
+        return l.goalTajweedSub;
+      case LearningGoal.memorize:
+        return l.goalMemorizeSub;
+      case LearningGoal.revise:
+        return l.goalReviseSub;
+      case LearningGoal.vocabulary:
+        return l.goalVocabularySub;
+      case LearningGoal.selectedSurahs:
+        return l.goalSelectedSurahsSub;
+      case LearningGoal.regularStudy:
+        return l.goalRegularStudySub;
+    }
+  }
 }
 
 /// Self-reported reading level gathered during onboarding.
@@ -31,6 +75,32 @@ enum ReadingLevel {
 
   /// Normalized 0..1 starting reading ability.
   double get startingLevel => index / (ReadingLevel.values.length - 1);
+
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case ReadingLevel.beginner:
+        return l.readingBeginner;
+      case ReadingLevel.letters:
+        return l.readingLetters;
+      case ReadingLevel.words:
+        return l.readingWords;
+      case ReadingLevel.fluent:
+        return l.readingFluent;
+    }
+  }
+
+  String localizedSubtitle(AppLocalizations l) {
+    switch (this) {
+      case ReadingLevel.beginner:
+        return l.readingBeginnerSub;
+      case ReadingLevel.letters:
+        return l.readingLettersSub;
+      case ReadingLevel.words:
+        return l.readingWordsSub;
+      case ReadingLevel.fluent:
+        return l.readingFluentSub;
+    }
+  }
 }
 
 /// Tajweed familiarity self-assessed during onboarding.
@@ -46,6 +116,32 @@ enum TajweedLevel {
   final String subtitle;
 
   double get startingLevel => index / (TajweedLevel.values.length - 1);
+
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case TajweedLevel.none:
+        return l.tajweedNone;
+      case TajweedLevel.basics:
+        return l.tajweedBasics;
+      case TajweedLevel.good:
+        return l.tajweedGood;
+      case TajweedLevel.strong:
+        return l.tajweedStrong;
+    }
+  }
+
+  String localizedSubtitle(AppLocalizations l) {
+    switch (this) {
+      case TajweedLevel.none:
+        return '';
+      case TajweedLevel.basics:
+        return l.tajweedBasicsSub;
+      case TajweedLevel.good:
+        return l.tajweedGoodSub;
+      case TajweedLevel.strong:
+        return l.tajweedStrongSub;
+    }
+  }
 }
 
 /// How many surahs (or rough amount) the learner has memorized.
@@ -62,6 +158,36 @@ enum MemorizationLevel {
   final String subtitle;
 
   double get startingLevel => index / (MemorizationLevel.values.length - 1);
+
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case MemorizationLevel.none:
+        return l.memNone;
+      case MemorizationLevel.aLittle:
+        return l.memALittle;
+      case MemorizationLevel.some:
+        return l.memSome;
+      case MemorizationLevel.substantial:
+        return l.memSubstantial;
+      case MemorizationLevel.lots:
+        return l.memLots;
+    }
+  }
+
+  String localizedSubtitle(AppLocalizations l) {
+    switch (this) {
+      case MemorizationLevel.none:
+        return '';
+      case MemorizationLevel.aLittle:
+        return l.memALittleSub;
+      case MemorizationLevel.some:
+        return l.memSomeSub;
+      case MemorizationLevel.substantial:
+        return l.memSubstantialSub;
+      case MemorizationLevel.lots:
+        return l.memLotsSub;
+    }
+  }
 }
 
 /// How often the learner intends to practice.
@@ -75,6 +201,19 @@ enum PracticeFrequency {
 
   final String label;
   final int minutesPerSession;
+
+  String localizedLabel(AppLocalizations l) {
+    switch (this) {
+      case PracticeFrequency.daily:
+        return l.freqDaily;
+      case PracticeFrequency.fewTimesWeek:
+        return l.freqFewTimesWeek;
+      case PracticeFrequency.weekly:
+        return l.freqWeekly;
+      case PracticeFrequency.occasional:
+        return l.freqOccasional;
+    }
+  }
 }
 
 /// The full learner profile assembled during onboarding.

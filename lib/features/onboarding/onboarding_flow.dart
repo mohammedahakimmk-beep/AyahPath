@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/widgets/app_widgets.dart';
 import '../../data/models/onboarding_profile.dart';
+import '../../l10n/ext.dart';
 import '../../services/app_state.dart';
 
 /// The full onboarding experience that builds a learner profile.
@@ -95,7 +96,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
               if (_step > 0)
                 TextButton(
                   onPressed: () => setState(() => _step--),
-                  child: const Text('Back'),
+                  child: Text(context.l10n.obBack),
                 ),
             ],
           ),
@@ -109,7 +110,17 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       case 0:
         return _Welcome(key: key, onNext: _next);
       case 1:
-        return _Language(key: key, value: _languageCode, onChange: (v) => setState(() => _languageCode = v), onNext: _next);
+        return _Language(
+          key: key,
+          value: _languageCode,
+          onChange: (v) {
+            setState(() => _languageCode = v);
+            // Apply immediately so the rest of onboarding (and the app) renders
+            // in the newly chosen language / RTL direction.
+            context.read<AppState>().setAppLanguage(v);
+          },
+          onNext: _next,
+        );
       case 2:
         return _Goals(
           key: key,
@@ -147,35 +158,55 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 }
 
 class _StepScaffold extends StatelessWidget {
-  const _StepScaffold({required this.icon, required this.title, required this.subtitle, required this.child});
+  const _StepScaffold({required this.icon, required this.title, required this.subtitle, required this.child, this.primaryLabel, this.onPrimary});
   final IconData icon;
   final String title;
   final String subtitle;
   final Widget child;
+  final String? primaryLabel;
+  final VoidCallback? onPrimary;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 26),
+                ),
+                const SizedBox(height: 20),
+                Text(title, style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 8),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 24),
+                child,
+                const SizedBox(height: 16),
+              ],
             ),
-            child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 26),
           ),
-          const SizedBox(height: 20),
-          Text(title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
-          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 24),
-          child,
-        ],
-      ),
+        ),
+        if (onPrimary != null)
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(onPressed: onPrimary, child: Text(primaryLabel ?? context.l10n.obContinue)),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -197,25 +228,23 @@ class _Welcome extends StatelessWidget {
           Icon(Icons.menu_book_rounded, size: 72, color: scheme.primary),
           const SizedBox(height: 24),
           Text(
-            'Welcome to AyahPath',
+            context.l10n.obWelcomeTitle,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 30),
           ),
           const SizedBox(height: 12),
           Text(
-            AppConstants.tagline,
+            context.l10n.obTagline,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5),
           ),
           const SizedBox(height: 16),
           Text(
-            'AyahPath learns how you learn. It will assess where you are, build a '
-            'personalized plan, listen to your reading on-device, and adapt every '
-            'lesson to your progress.',
+            context.l10n.obWelcomeDesc,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const Spacer(),
           SizedBox(
             width: double.infinity,
-            child: FilledButton(onPressed: onNext, child: const Text('Begin my journey')),
+            child: FilledButton(onPressed: onNext, child: Text(context.l10n.obBeginJourney)),
           ),
         ],
       ),
@@ -239,14 +268,15 @@ class _Language extends StatelessWidget {
     return _OptionListStep(
       key: key,
       icon: Icons.translate,
-      title: 'Choose your language',
-      subtitle: 'AyahPath will use this language for the interface.',
-      options: const [
-        ('English', 'Start with English as the interface language'),
-        ('العربية', 'الواجهة باللغة العربية'),
+      title: context.l10n.obLanguageTitle,
+      subtitle: context.l10n.obLanguageSubtitle,
+      options: [
+        (context.l10n.obLangEnglish, context.l10n.obLangEnglishDesc),
+        (context.l10n.obLangArabic, context.l10n.obLangArabicDesc),
       ],
       selected: value == 'ar' ? 1 : 0,
       onSelect: (i) => onChange(_languages[i].$1),
+      primaryLabel: context.l10n.obContinue,
       onPrimary: onNext,
     );
   }
@@ -262,8 +292,10 @@ class _Goals extends StatelessWidget {
   Widget build(BuildContext context) {
     return _StepScaffold(
       icon: Icons.flag_rounded,
-      title: 'What do you want to achieve?',
-      subtitle: 'Select all that apply. AyahPath weaves these into your daily plan.',
+      title: context.l10n.obGoalsTitle,
+      subtitle: context.l10n.obGoalsSubtitle,
+      onPrimary: onNext,
+      primaryLabel: context.l10n.obContinue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -272,8 +304,8 @@ class _Goals extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: _SelectableRow(
                 selected: goals.contains(g),
-                title: g.label,
-                subtitle: g.subtitle,
+                title: g.localizedLabel(context.l10n),
+                subtitle: g.localizedSubtitle(context.l10n),
                 icon: Icons.check_rounded,
                 onTap: () => onToggle(g),
               ),
@@ -295,11 +327,12 @@ class _ReadingStep extends StatelessWidget {
     return _OptionListStep(
       key: key,
       icon: Icons.abc,
-      title: 'How is your Arabic reading?',
-      subtitle: 'This helps us start at the right level.',
-      options: ReadingLevel.values.map((l) => (l.label, l.subtitle)).toList(),
+      title: context.l10n.obReadingTitle,
+      subtitle: context.l10n.obReadingSubtitle,
+      options: ReadingLevel.values.map((l) => (l.localizedLabel(context.l10n), l.localizedSubtitle(context.l10n))).toList(),
       selected: value.index,
       onSelect: (i) => onChanged(ReadingLevel.values[i]),
+      primaryLabel: context.l10n.obContinue,
       onPrimary: onNext,
     );
   }
@@ -325,12 +358,12 @@ class _TajweedStep extends StatelessWidget {
     return _OptionListStep(
       key: key,
       icon: Icons.hearing_rounded,
-      title: 'About Tajweed & memorization',
-      subtitle: 'Two quick questions about your background.',
+      title: context.l10n.obTajweedTitle,
+      subtitle: context.l10n.obTajweedSubtitle,
       extraAbove: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('How familiar are you with Tajweed?', style: Theme.of(context).textTheme.titleMedium),
+          Text(context.l10n.obTajweedQuestion, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12),
           ...List.generate(TajweedLevel.values.length, (i) {
             final t = TajweedLevel.values[i];
@@ -338,8 +371,8 @@ class _TajweedStep extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: _SelectableRow(
                 selected: value.index == i,
-                title: t.label,
-                subtitle: t.subtitle,
+                title: t.localizedLabel(context.l10n),
+                subtitle: t.localizedSubtitle(context.l10n),
                 icon: Icons.check_rounded,
                 onTap: () => onChanged(t),
               ),
@@ -347,10 +380,11 @@ class _TajweedStep extends StatelessWidget {
           }),
         ],
       ),
-      options: MemorizationLevel.values.map((m) => (m.label, m.subtitle)).toList(),
+      options: MemorizationLevel.values.map((m) => (m.localizedLabel(context.l10n), m.localizedSubtitle(context.l10n))).toList(),
       selected: memorization.index,
-      optionTitle: 'How much have you memorized?',
+      optionTitle: context.l10n.obMemQuestion,
       onSelect: (i) => onMemorization(MemorizationLevel.values[i]),
+      primaryLabel: context.l10n.obContinue,
       onPrimary: onNext,
     );
   }
@@ -367,11 +401,11 @@ class _FrequencyStep extends StatelessWidget {
     return _OptionListStep(
       key: key,
       icon: Icons.calendar_today_rounded,
-      title: 'How often will you practice?',
-      subtitle: 'We’ll size each lesson to fit your rhythm.',
-      options: PracticeFrequency.values.map((f) => ('${f.label} · ~${f.minutesPerSession} min', 'A consistent habit builds steady progress')).toList(),
+      title: context.l10n.obFrequencyTitle,
+      subtitle: context.l10n.obFrequencySubtitle,
+      options: PracticeFrequency.values.map((f) => (context.l10n.obFreqMinutes(f.localizedLabel(context.l10n), f.minutesPerSession), context.l10n.obFreqHabitDesc)).toList(),
       selected: value.index,
-      primaryLabel: 'Create my personalized plan',
+      primaryLabel: context.l10n.obCreatePlan,
       onSelect: (i) => onChanged(PracticeFrequency.values[i]),
       onPrimary: onFinish,
     );
@@ -391,7 +425,7 @@ class _OptionListStep extends StatelessWidget {
     required this.onPrimary,
     this.optionTitle,
     this.extraAbove,
-    this.primaryLabel = 'Continue',
+    this.primaryLabel,
   });
 
   final IconData icon;
@@ -403,54 +437,66 @@ class _OptionListStep extends StatelessWidget {
   final VoidCallback onPrimary;
   final String? optionTitle;
   final Widget? extraAbove;
-  final String primaryLabel;
+  final String? primaryLabel;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 26),
+                ),
+                const SizedBox(height: 20),
+                Text(title, style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 8),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 24),
+                if (extraAbove != null) ...[extraAbove!, const SizedBox(height: 4)],
+                if (optionTitle != null) ...[
+                  Text(optionTitle!, style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 12),
+                ],
+                for (var i = 0; i < options.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _SelectableRow(
+                      selected: i == selected,
+                      title: options[i].$1,
+                      subtitle: options[i].$2,
+                      icon: Icons.radio_button_checked_rounded,
+                      onTap: () => onSelect(i),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+              ],
             ),
-            child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 26),
           ),
-          const SizedBox(height: 20),
-          Text(title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
-          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 24),
-          if (extraAbove != null) ...[extraAbove!, const SizedBox(height: 4)],
-          if (optionTitle != null) ...[
-            Text(optionTitle!, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-          ],
-          for (var i = 0; i < options.length; i++)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _SelectableRow(
-                selected: i == selected,
-                title: options[i].$1,
-                subtitle: options[i].$2,
-                icon: Icons.radio_button_checked_rounded,
-                onTap: () => onSelect(i),
+        ),
+        SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: selected >= 0 ? onPrimary : null,
+                child: Text(primaryLabel ?? context.l10n.obContinue),
               ),
             ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: selected >= 0 ? onPrimary : null,
-              child: Text(primaryLabel),
-            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
