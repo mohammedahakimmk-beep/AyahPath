@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AyahPath — Your Personalized Path to Learning the Quran</title>
+<meta name="description" content="AyahPath is an adaptive, offline-first Quran learning app. Personalized lessons, AI recitation analysis, and a built-in Quran reader — all private on your device.">
+<style>
+  :root {
+    --teal: #1F5F57;
+    --teal-soft: #BFDED5;
+    --gold: #B08D3E;
+    --cream: #FBF7EE;
+    --ink: #24302D;
+    --ink-soft: #5C6B67;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .btn {
+    display:inline-flex; align-items:center; gap:10px;
+    padding:16px 32px; border-radius:50px; font-size:17px; font-weight:700;
+    text-decoration:none; cursor:pointer; border:none; transition: transform .15s, box-shadow .15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--teal); color:#fff; box-shadow:0 8px 24px rgba(31,95,87,.3); }
+  .btn-primary:hover { box-shadow:0 12px 30px rgba(31,95,87,.4); }
+  .btn-gold { background: var(--gold); color:#fff; box-shadow:0 8px 24px rgba(176,141,62,.3); }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, var(--teal) 0%, #2E7D6B 100%); color:#fff; padding:90px 0 70px; text-align:center; }
+  .logo { font-size:18px; letter-spacing:2px; font-weight:700; opacity:.9; margin-bottom:40px; }
+  .hero h1 { font-size:56px; font-weight:800; margin-bottom:16px; line-height:1.15; }
+  .hero p { font-size:20px; max-width:680px; margin:0 auto 36px; opacity:.92; }
+  .arabic {
+    font-size:44px; margin:28px 0; direction: rtl;
+    font-family: "Amiri", "Traditional Arabic", serif;
+  }
+  .badges { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:32px; }
+  .badge { background:rgba(255,255,255,.15); padding:8px 18px; border-radius:30px; font-size:14px; font-weight:600; }
+
+  /* Feature sections */
+  .section { padding:70px 0; }
+  .section.alt { background:#fff; }
+  .kicker { color:var(--gold); text-transform:uppercase; letter-spacing:1.5px; font-size:13px; font-weight:700; }
+  h2 { font-size:34px; font-weight:800; margin:10px 0 18px; }
+  .lead { font-size:18px; color:var(--ink-soft); max-width:640px; margin-bottom:40px; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+  .feature {
+    background:#fff; border:1px solid #eee; border-radius:20px; padding:28px;
+    transition: transform .18s, box-shadow .18s;
+  }
+  .section.alt .feature { background:var(--cream); border-color:#eee; }
+  .feature:hover { transform: translateY(-4px); box-shadow:0 14px 34px rgba(36,48,45,.08); }
+  .feature .icon { font-size:34px; margin-bottom:14px; }
+  .feature h3 { font-size:19px; margin-bottom:8px; }
+  .feature p { color:var(--ink-soft); font-size:15px; }
+
+  /* Steps */
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:20px; }
+  .step { background:#fff; border:1px solid #eee; border-radius:16px; padding:24px; position:relative; }
+  .step .num {
+    width:36px; height:36px; border-radius:50%; background:var(--teal-soft); color:var(--teal);
+    display:flex; align-items:center; justify-content:center; font-weight:800; margin-bottom:12px;
+  }
+  .step h4 { margin-bottom:6px; }
+  .step p { color:var(--ink-soft); font-size:14px; }
+
+  .cta {
+    text-align:center; background:linear-gradient(135deg, #2E7D6B, var(--teal)); color:#fff; padding:70px 24px;
+  }
+  .cta h2 { color:#fff; }
+  .cta p { opacity:.9; max-width:560px; margin:0 auto 32px; }
+
+  footer { background:var(--ink); color:#cfd8d4; padding:40px 24px; text-align:center; font-size:14px; }
+  footer a { color:var(--gold); text-decoration:none; }
+  .footer-note { margin-top:10px; opacity:.7; font-size:13px; }
+
+  @media (max-width:640px){
+    .hero h1{ font-size:38px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="container">
+    <div class="logo">AYAHPATH</div>
+    <div class="arabic">ٱقْرَأْ بِٱسْمِ رَبِّكَ ٱلَّذِى خَلَقَ</div>
+    <h1>Your Personalized Path<br>to Learning the Qur'an</h1>
+    <p>An adaptive, offline-first Quran learning companion. AI-guided lessons, real recitation feedback, and a built-in Quran reader — all private, on your device.</p>
+    <a class="btn btn-gold" href="app-release.apk" download>AyahPath <span style="font-size:13px;">v1.0.0</span> Download APK</a>
+    <div class="badges">
+      <span class="badge">✓ Offline-first</span>
+      <span class="badge">✓ Privacy-first</span>
+      <span class="badge">✓ 114 Surahs</span>
+      <span class="badge">✓ On-device AI</span>
+    </div>
+  </div>
+</header>
+
+<!-- How lessons work -->
+<section class="section alt">
+  <div class="container">
+    <div class="kicker">How it works</div>
+    <h2>Every surah is a step-by-step lesson</h2>
+    <p class="lead">Follow a proven flow for each surah — listen, repeat, read alone, then take an AI test. Long surahs are split into easy one-page parts.</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h4>Listen &amp; Repeat</h4><p>Hear each ayah, then repeat it aloud. The app listens and guides you.</p></div>
+      <div class="step"><div class="num">2</div><h4>Read Alone</h4><p>Read the ayahs from memory at your own pace — accuracy over speed.</p></div>
+      <div class="step"><div class="num">3</div><h4>AI Recitation Test</h4><p>Recite without looking. On-device AI analyses pronunciation and accuracy.</p></div>
+      <div class="step"><div class="num">4</div><h4>Understand &amp; Master</h4><p>Study the translation, then move on. Your progress is tracked automatically.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section">
+  <div class="container">
+    <div class="kicker">Features</div>
+    <h2>Everything you need, in one app</h2>
+    <p class="lead">AyahPath combines modern adaptive learning with deep respect for the Qur'an. AI assists — it never replaces a teacher.</p>
+    <div class="grid">
+      <div class="feature"><div class="icon">🧠</div><h3>Adaptive Lessons</h3><p>Lessons adapt to your skill level and focus on your weakest areas, automatically.</p></div>
+      <div class="feature"><div class="icon">🎙️</div><h3>AI Recitation Analysis</h3><p>Real-time voice analysis gives you instant feedback on each ayah — fully on-device.</p></div>
+      <div class="feature"><div class="icon">📖</div><h3>Full Qur'an Reader</h3><p>Browse all 114 surahs with Uthmani text, translations, bookmarks, and notes.</p></div>
+      <div class="feature"><div class="icon">🔒</div><h3>Privacy-First</h3><p>All analysis and progress happens on your device. Nothing leaves without your permission.</p></div>
+      <div class="feature"><div class="icon">📈</div><h3>Progress Tracking</h3><p>Track streaks, mastery, memorization (Hifz), and overall journey at a glance.</p></div>
+      <div class="feature"><div class="icon">🤖</div><h3>AI Tutor</h3><p>Get trusted, knowledge-based answers about the surahs — with guidance to real teachers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Download / install -->
+<section class="cta" id="download">
+  <div class="container">
+    <h2>Get started today</h2>
+    <p>Download the free APK and begin your journey to connect with the Qur'an. Works fully offline — your data stays on your device.</p>
+    <a class="btn btn-gold" href="app-release.apk" download>Download AyahPath APK</a>
+  </div>
+</section>
+
+<!-- Installation steps -->
+<section class="section">
+  <div class="container">
+    <div class="kicker">Installation</div>
+    <h2>How to install on Android</h2>
+    <p class="lead">The APK is an Android app. Follow these steps to install it safely. (We do not publish to the Play Store yet — this is a direct APK.)</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h4>Download the APK</h4><p>Tap the "Download APK" button above. If it doesn't start automatically, tap the button again and choose "Save".</p></div>
+      <div class="step"><div class="num">2</div><h4>Open the file</h4><p>Open your Downloads folder (or notifications) and tap <strong>app-release.apk</strong>.</p></div>
+      <div class="step"><div class="num">3</div><h4>Allow installs</h4><p>Android will warn about installing from unknown sources. Tap <strong>Settings</strong> → allow <strong>"Install unknown apps"</strong> for your browser or file manager.</p></div>
+      <div class="step"><div class="num">4</div><h4>Install &amp; open</h4><p>Tap <strong>Install</strong>, then <strong>Open</strong>. If prompted, tap <strong>"Install anyway"</strong> for the Play Protect notice.</p></div>
+    </div>
+    <div style="margin-top:40px; padding:24px; background:#fff; border:1px solid #eee; border-radius:16px; max-width:720px;">
+      <h3 style="margin-bottom:12px;">🛡️ Quick troubleshooting</h3>
+      <ul style="color:var(--ink-soft); padding-left:20px; font-size:15px;">
+        <li><strong>"App not installed"</strong> → make sure you downloaded the whole file (check size, should be ~50&nbsp;MB+) and delete old attempts.</li>
+        <li><strong>"Didn't start download"</strong> → long-press the download button and choose "Download linked file", or open the site in Chrome.</li>
+        <li><strong>Play Protect warning</strong> → this is normal for direct APKs; tap "More details" → "Install anyway".</li>
+        <li><strong>Updates</strong> → the app checks for updates on launch. If an update is required, you'll be prompted to download it—your data is preserved.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>AyahPath — Learn the Qur'an, at your own pace.</div>
+  <div class="footer-note">Qur'an text from trusted sources (Uthmani Hafs + Saheeh International). AI never generates or alters Qur'anic text — it only assists learning.</div>
+</footer>
+
+</body>
+</html>
