@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for auto-update version checking and opening the download URL -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Required for recitation voice analysis -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
-        android:label="ayahpath"
+        android:label="AyahPath"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
