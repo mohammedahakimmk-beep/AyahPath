@@ -50,6 +50,17 @@ abstract class VoiceAnalysisService {
   /// Download (or prepare) the on-device voice model.
   Future<bool> prepareModel();
 
+  /// Release the in-memory model and (where supported) delete its cached
+  /// on-device files to reclaim storage.
+  Future<void> deleteModel();
+
+  /// Begin capturing the microphone. Returns false (with a message via
+  /// [onMicError]) if capture could not start.
+  Future<bool> startRecording({void Function(String)? onMicError});
+
+  /// Stop capture and analyze [target] against what was recited.
+  Future<RecitationFeedback> stopAndAnalyze({required List<Ayah> target});
+
   /// Analyze an audio clip of the learner reciting [target] ayahs.
   ///
   /// This is the plug point where a real speech-to-text + alignment model is

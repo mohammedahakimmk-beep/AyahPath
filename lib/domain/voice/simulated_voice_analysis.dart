@@ -34,6 +34,18 @@ class SimulatedVoiceAnalysisService implements VoiceAnalysisService {
   }
 
   @override
+  Future<void> deleteModel() async {
+    modelPrepared = false;
+  }
+
+  @override
+  Future<bool> startRecording({void Function(String)? onMicError}) async => true;
+
+  @override
+  Future<RecitationFeedback> stopAndAnalyze({required List<Ayah> target}) async =>
+      analyze(target: target);
+
+  @override
   Future<RecitationFeedback> analyze({
     required List<Ayah> target,
     Duration? duration,

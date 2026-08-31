@@ -50,12 +50,27 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
   }
 
   void _start() {
+    final app = context.read<AppState>();
     setState(() {
       _phase = _Phase.listening;
       _elapsed = Duration.zero;
     });
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       setState(() => _elapsed += const Duration(seconds: 1));
+    });
+    // Begin on-device capture immediately; show an error if the mic fails.
+    if (!app.voice.isModelReady) {
+      // Model not ready yet: still enter listening so the flow stays obvious,
+      // but analysis will report that the model is not installed.
+      return;
+    }
+    app.voice.startRecording(onMicError: (msg) {
+      if (!mounted) return;
+      setState(() {
+        _phase = _Phase.ready;
+        _feedback = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     });
   }
 
@@ -65,7 +80,7 @@ class _RecitationPracticeScreenState extends State<RecitationPracticeScreen> {
     final app = context.read<AppState>();
     final target = QuranDataset.byNumber(_surahNumber)?.ayahs.take(_ayahCount).toList() ??
         [];
-    final result = await app.voice.analyze(target: target, duration: _elapsed);
+    final result = await app.voice.stopAndAnalyze(target: target);
 
     // Feed the adaptive engine with the reading outcome.
     await app.recordPractice(

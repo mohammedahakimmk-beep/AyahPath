@@ -116,10 +116,27 @@ void main() {
   });
 
   group('QuranDataset', () {
+    setUpAll(() async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      await QuranDataset.load();
+    });
+
     test('contains trusted surahs on-device', () {
+      expect(QuranDataset.count, 114);
       expect(QuranDataset.byNumber(1)!.englishName, 'Al-Fatihah');
       expect(QuranDataset.byNumber(112)!.ayahCount, 4);
       expect(QuranDataset.byNumber(1)!.ayahs[0].arabic, isNotEmpty);
+      expect(QuranDataset.byNumber(2)!.ayahCount, 286);
+    });
+
+    test('all 114 surahs have ayah text', () {
+      expect(QuranDataset.all.length, 114);
+      int totalAyahs = 0;
+      for (final s in QuranDataset.all) {
+        expect(s.ayahs.length, greaterThan(0), reason: 'Surah ${s.number} has text');
+        totalAyahs += s.ayahs.length;
+      }
+      expect(totalAyahs, 6236);
     });
 
     test('passages stay frozen (never regenerated)', () {

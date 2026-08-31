@@ -15,6 +15,13 @@ dependencies:
   collection: ^1.18.0
   http: ^1.2.2
   url_launcher: ^6.3.1
+  permission_handler: ^12.0.0
+  path_provider: ^2.1.6
+  # Vendored locally (third_party/flutter_whisper) because the published
+  # package omits miniaudio.h (the microphone/decoder header its JNI bridge
+  # needs). We patch in the missing header so whisper.cpp compiles on-device.
+  flutter_whisper:
+    path: third_party/flutter_whisper
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +35,6 @@ flutter:
     - family: AmiriQuran
       fonts:
         - asset: assets/fonts/AmiriQuran-Regular.ttf
+
+  assets:
+    - assets/quran/quran.json

@@ -13,8 +13,8 @@ import '../domain/adaptive/profile_seeder.dart';
 import '../domain/adaptive/skill_tracker.dart';
 import '../domain/adaptive/surah_lesson_generator.dart';
 import '../domain/model/model_manager_service.dart';
-import '../domain/voice/simulated_voice_analysis.dart';
 import '../domain/voice/voice_analysis_service.dart';
+import '../domain/voice/whisper_voice_analysis.dart';
 
 /// Central application state: the learner model + per-cycle lesson plan.
 ///
@@ -23,7 +23,7 @@ import '../domain/voice/voice_analysis_service.dart';
 /// practice → voice analysis → assessment → profile update → next lesson.
 class AppState extends ChangeNotifier {
   AppState({required this._store})
-      : voice = SimulatedVoiceAnalysisService() {
+      : voice = WhisperVoiceAnalysisService() {
     _load();
   }
 
@@ -37,8 +37,16 @@ class AppState extends ChangeNotifier {
   /// Voice analysis (on-device by default).
   final VoiceAnalysisService voice;
 
-  /// On-device model manager.
+  /// Real on-device model manager (the Whisper recitation model).
   final ModelManagerService models = ModelManagerService();
+
+  /// Installation status of the on-device voice model.
+  bool get voiceModelInstalled => voice.isModelReady;
+  String? get voiceModelError => (voice is WhisperVoiceAnalysisService)
+      ? (voice as WhisperVoiceAnalysisService).lastError
+      : null;
+  double get voiceStorageUsedMb =>
+      voiceModelInstalled ? ModelManagerService.availableModels.first.sizeMb.toDouble() : 0;
 
   ThemeMode themeMode = ThemeMode.system;
   bool notificationsEnabled = true;
@@ -341,14 +349,16 @@ class AppState extends ChangeNotifier {
   // ---------- Model manager hooks ----------
 
   Future<void> downloadModel(ModelOption option) async {
-    await models.download(option);
+    // The real Whisper model downloads (once) from HuggingFace on first use.
     await voice.prepareModel();
     persist();
     notifyListeners();
   }
 
   Future<void> removeModel() async {
-    await models.delete();
+    if (voice is WhisperVoiceAnalysisService) {
+      await (voice as WhisperVoiceAnalysisService).deleteModel();
+    }
     persist();
     notifyListeners();
   }
